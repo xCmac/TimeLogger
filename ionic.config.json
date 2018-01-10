@@ -1,6 +1,6 @@
 {
   "name": "timelogger",
-  "app_id": "",
+  "app_id": "830dc304",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
