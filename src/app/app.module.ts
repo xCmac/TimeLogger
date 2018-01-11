@@ -3,10 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-import { LoginPage } from '../pages/login/login';
-import { ChartsPage } from '../pages/charts/charts';
-import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { FIREBASE_CREDENTIALS } from "./firebase.credentials";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -16,27 +15,22 @@ import { ChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [
     MyApp,
-    ChartsPage,
-    LoginPage,
-    HomePage,
-    TabsPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    ChartsModule
+    ChartsModule,
+    AngularFireModule.initializeApp(FIREBASE_CREDENTIALS),
+    AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    ChartsPage,
-    LoginPage,
-    HomePage,
-    TabsPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    AngularFireAuthModule,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
