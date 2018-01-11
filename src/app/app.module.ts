@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
+import { LoginPage } from '../pages/login/login';
 import { ChartsPage } from '../pages/charts/charts';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
@@ -16,6 +17,7 @@ import { ChartsModule } from 'ng2-charts';
   declarations: [
     MyApp,
     ChartsPage,
+    LoginPage,
     HomePage,
     TabsPage
   ],
@@ -28,6 +30,7 @@ import { ChartsModule } from 'ng2-charts';
   entryComponents: [
     MyApp,
     ChartsPage,
+    LoginPage,
     HomePage,
     TabsPage
   ],
