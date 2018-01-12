@@ -19,7 +19,7 @@ export class LoginPage {
     try {
       const result = await this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password);
       if (result) {
-        this.navCtrl.setRoot('HomePage');
+        this.navCtrl.setRoot('TabsPage');
       }
     }
     catch (e) {
@@ -35,7 +35,7 @@ export class LoginPage {
         user.password
       );
       if (result) {
-        this.navCtrl.setRoot('HomePage');
+        this.navCtrl.setRoot('TabsPage');
       }
     } catch (e) {
       this.presentToast(e.message);
