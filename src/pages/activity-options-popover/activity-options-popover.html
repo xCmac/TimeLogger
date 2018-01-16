@@ -1,17 +1,18 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>activityOptionsPopover</ion-title>
+    <ion-title>Activities</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content padding>
   <ion-grid>
-    <ion-row *ngFor="let row of [0,1,2]">
-      <ion-col *ngFor="let col of [0,1,2]">
-        <button ion-button full>{{(row + 1) + (3 * col)}}</button>
+    <ion-row>
+      <ion-col *ngFor="let activity of activities | async">
+        <button ion-button full>{{activity}}</button>
       </ion-col>
     </ion-row>
+    <button ion-button full color="secondary" (click)="createNewActivity()">Create New Activity</button>
   </ion-grid>
 </ion-content>
