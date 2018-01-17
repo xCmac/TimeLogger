@@ -1,13 +1,13 @@
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Injectable } from '@angular/core';
+import { ActivityProvider } from '../activity/activity';
 
 @Injectable()
 export class AuthProvider {
 
   user: any;
 
-  constructor(private afAuth: AngularFireAuth) {
-    console.log('Hello AuthProvider Provider');
+  constructor(private afAuth: AngularFireAuth, private activityProvider: ActivityProvider) {
     this.afAuth.authState.subscribe(user => {
       if(user) { 
         this.user = user; 
@@ -16,12 +16,13 @@ export class AuthProvider {
   }
 
   async login(email: string, password: string) {
-    console.log("Login called");
-    this.user = await this.afAuth.auth.signInWithEmailAndPassword(email, password);
+    this.user = this.afAuth.auth.signInWithEmailAndPassword(email, password);
+    var data = await this.activityProvider.readActivities(this.user.uid);
+
+    console.log(data);
   }
 
   async register(email: string, password: string) {
-    console.log("register called");
     this.user = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
   }
 

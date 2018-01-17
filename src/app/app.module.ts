@@ -13,6 +13,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { ChartsModule } from 'ng2-charts';
 import { AuthProvider } from '../providers/auth/auth';
+import { ActivityProvider } from '../providers/activity/activity';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { AuthProvider } from '../providers/auth/auth';
     SplashScreen,
     AngularFireAuthModule,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthProvider
+    AuthProvider,
+    ActivityProvider
   ]
 })
 export class AppModule {}
