@@ -5,6 +5,7 @@ import { MyApp } from './app.component';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { FIREBASE_CREDENTIALS } from "./firebase.credentials";
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -21,7 +22,8 @@ import { ChartsModule } from 'ng2-charts';
     IonicModule.forRoot(MyApp),
     ChartsModule,
     AngularFireModule.initializeApp(FIREBASE_CREDENTIALS),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFireDatabaseModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
