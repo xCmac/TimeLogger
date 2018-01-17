@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content padding>
-  <form [formGroup]="loginForm" (submit)="submit($event)" novalidate>
+  <form [formGroup]="loginForm" novalidate>
       <ion-item>
         <ion-label floating>Email Address</ion-label>
         <ion-input formControlName="email" type="text" [(ngModel)]="user.email"></ion-input>

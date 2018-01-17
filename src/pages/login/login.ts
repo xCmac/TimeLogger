@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController  } from 'ionic-angular';
+import { AuthProvider } from '../../providers/auth/auth';
 import { User } from "../../models/user";
-import { AngularFireAuth } from 'angularfire2/auth';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @IonicPage()
@@ -14,8 +14,10 @@ export class LoginPage {
   user = {} as User;
   loginForm: FormGroup;
 
-  constructor(private afAuth: AngularFireAuth, public navCtrl: NavController, private toastCtrl: ToastController, 
-    private formBuilder: FormBuilder) {
+  constructor(public navCtrl: NavController, 
+              private toastCtrl: ToastController, 
+              private formBuilder: FormBuilder,
+              private authProvider: AuthProvider) {
     
     this.loginForm = formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -25,12 +27,9 @@ export class LoginPage {
 
   async login() {
     try {
-      const result = await this.afAuth.auth.signInWithEmailAndPassword(this.user.email, this.user.password);
-      if (result) {
-        this.navCtrl.setRoot('TabsPage');
-      }
-    }
-    catch (e) {
+      await this.authProvider.login(this.user.email, this.user.password)
+      this.navCtrl.setRoot('TabsPage');
+    } catch (e) {
       this.presentToast(e.message);
       console.error(e);
     }
@@ -38,20 +37,15 @@ export class LoginPage {
 
   async register() {
     try {
-      const result = await this.afAuth.auth.createUserWithEmailAndPassword(
-        this.user.email,
-        this.user.password
-      );
-      if (result) {
-        this.navCtrl.setRoot('TabsPage');
-      }
+      await this.authProvider.register(this.user.email, this.user.password)
+      this.navCtrl.setRoot('TabsPage');
     } catch (e) {
       this.presentToast(e.message);
       console.error(e);
     }
   }
 
-  private submit(type: string) {
+  submit(type: string) {
     if (type === "login") {
       this.login();
     }
