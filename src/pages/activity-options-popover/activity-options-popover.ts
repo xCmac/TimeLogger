@@ -11,6 +11,7 @@ import { Observable } from 'rxjs/Observable';
 export class ActivityOptionsPopoverPage {
 
   activities: Observable<any[]>;
+  newActivity: string = "";
 
   constructor(public navCtrl: NavController, 
               private activityProvider: ActivityProvider) {
@@ -22,8 +23,8 @@ export class ActivityOptionsPopoverPage {
     console.log('ionViewDidLoad ActivityOptionsPopoverPage');
   }
 
-  createNewActivity(name: string) {
-    this.activityProvider.createActivity(name);
+  createNewActivity() {
+    this.activityProvider.createActivity(this.newActivity);
   }
 
   updateActivity() {

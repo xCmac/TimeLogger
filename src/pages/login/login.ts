@@ -18,6 +18,9 @@ export class LoginPage {
               private toastCtrl: ToastController, 
               private formBuilder: FormBuilder,
               private authProvider: AuthProvider) {
+
+    this.user.email = "a@b.com";
+    this.user.password = "123456";
     
     this.loginForm = formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
