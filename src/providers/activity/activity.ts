@@ -11,30 +11,29 @@ export class ActivityProvider {
     console.log('Hello ActivityProvider Provider');
   }
 
-  setReferences(uid: string) {
+  public setReferences(uid: string) {
     this.activitiesRef = this.afDatabase.list(`activities/${uid}`);
     this.logsRef = this.afDatabase.list(`logs/${uid}`);
   }
 
-  createDefaultActivities(uid: string) {
+  public createDefaultActivities() {
     this.activitiesRef.push('work');
     this.activitiesRef.push('sleep');
     this.activitiesRef.push('hobbies');
   }
 
-  createActivity() {
-
+  public createActivity(name: string) {
+    this.activitiesRef.push(name);
   }
 
-  readActivities(id: string): Observable<any[]>{
+  public readActivities(): Observable<any[]> {
     return this.activitiesRef.valueChanges();
   }
 
-  updateActivity() {
-
+  public updateActivity(key: string, name: string) {
   }
 
-  deleteActivity() {
+  public deleteActivity() {
 
   }
 }

@@ -10,7 +10,7 @@
   <ion-grid>
     <ion-row>
       <ion-col *ngFor="let activity of activities | async">
-        <button ion-button full>{{activity}}</button>
+        <button ion-button full (click)="updateActivity()">{{ activity }}</button>
       </ion-col>
     </ion-row>
     <button ion-button full color="secondary" (click)="createNewActivity()">Create New Activity</button>

@@ -20,6 +20,7 @@ export class AuthProvider {
 
   async login(email: string, password: string) {
     this.user = await this.afAuth.auth.signInWithEmailAndPassword(email, password);
+    console.log(this.activityProvider);
     this.activityProvider.setReferences(this.user.uid);
   }
 
@@ -30,7 +31,7 @@ export class AuthProvider {
       .child(this.user.uid)
       .set({email: email });
       this.activityProvider.setReferences(this.user.uid);
-      this.activityProvider.createDefaultActivities(this.user.uid);
+      this.activityProvider.createDefaultActivities();
     }
   }
 

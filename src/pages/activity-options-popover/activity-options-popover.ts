@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { ActivityProvider } from '../../providers/activity/activity';
 import { Observable } from 'rxjs/Observable';
 
 @IonicPage()
@@ -13,16 +13,21 @@ export class ActivityOptionsPopoverPage {
   activities: Observable<any[]>;
 
   constructor(public navCtrl: NavController, 
-              private afDatabase: AngularFireDatabase) {
-    this.activities = this.afDatabase.list('/activities').valueChanges();
+              private activityProvider: ActivityProvider) {
+
+    this.activities = this.activityProvider.readActivities();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ActivityOptionsPopoverPage');
   }
 
-  createNewActivity() {
+  createNewActivity(name: string) {
+    this.activityProvider.createActivity(name);
+  }
 
+  updateActivity() {
+    console.log("Updating activity");
   }
 
 }
