@@ -2,9 +2,12 @@ import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { AuthProvider } from '../providers/auth/auth';
+import { ActivityProvider } from '../providers/activity/activity';
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
+  providers: [AuthProvider, ActivityProvider]
 })
 export class MyApp {
   rootPage: any = 'LoginPage';
