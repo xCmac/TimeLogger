@@ -10,7 +10,7 @@
 <ion-content padding>
 <ion-list no-lines>
 
-  <ion-row *ngFor="let activity of activityProvider.activities | async">
+  <ion-row *ngFor="let activity of activityProvider.activities">
     <ion-col>
      {{ activity.name }}
     </ion-col>

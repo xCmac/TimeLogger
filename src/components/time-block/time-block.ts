@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'time-block',
@@ -7,7 +7,17 @@ import { Component, Input } from '@angular/core';
 export class TimeBlockComponent {
 
   @Input() name: string;
+  @Output() toggle: EventEmitter<any> = new EventEmitter<any>();
+  selected: boolean = false;
 
   constructor() {
+  }
+
+  private toggleSelected() {
+    this.selected = !this.selected;
+    this.toggle.emit({
+      name: this.name,
+      selected: this.selected
+    });
   }
 }

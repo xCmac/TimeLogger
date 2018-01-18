@@ -6,17 +6,30 @@ import { Activity } from '../../models/activity';
 @Injectable()
 export class ActivityProvider {
   activitiesRef:  AngularFireList<any>;
-  activities: Observable<Activity[]>
+  activities: Activity[];
 
   constructor(private afDatabase: AngularFireDatabase) {
-    console.log('Hello ActivityProvider Provider');
   }
 
   public setReferences(uid: string) {
     this.activitiesRef = this.afDatabase.list(`activities/${uid}`);
-    this.activities = this.activitiesRef.snapshotChanges().map(changes => {
-      return changes.map(c => ({ $key: c.payload.key, ...c.payload.val() }));
+    this.activitiesRef.snapshotChanges().subscribe(changes => {
+      this.activities = changes.map(data => {
+        let activity: Activity = {
+          $key: data.key,
+          name: data.payload.val().name
+        }
+
+        return activity;
+      });
+      
     });
+  }
+
+  public getActivityById(id: string) {
+    return this.activities.find(activity => {
+      return activity.$key === id;
+    })
   }
 
   public createDefaultActivities() {
