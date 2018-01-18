@@ -36,9 +36,35 @@ export class LogProvider {
   }
 
   public logActivity(block: number, activityID: string) {
+    let log: Log = this.getLogByBlock(block)
+
+    if (!log) {
+      this.createNewLog(block, activityID);
+    }
+    else {
+      this.updateLog(log, activityID);
+    }
+  }
+
+  private createNewLog(block: number, activityID: string) {
     this.logsRef.push({
       blockNumber: block,
       activityID: activityID
+    });
+  }
+
+  private updateLog(log: Log, activityID: string) {
+    let data: any = {
+      activityID: activityID,
+      blockNumber: log.blockNumber
+    }
+
+    this.logsRef.update(log.$key, data);
+  }
+
+  private getLogByBlock(block: number): Log {
+    return this.logs.find(log => {
+      return log.blockNumber === block;
     });
   }
 }
