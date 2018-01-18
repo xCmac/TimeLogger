@@ -34,4 +34,8 @@ export class ActivityOptionsPopoverPage {
     this.activityProvider.deleteActivity(activity.$key);
   }
 
+  showActivitesCRUDModal() {
+    console.log("Showing activities CRUD modal");
+  }
+
 }
