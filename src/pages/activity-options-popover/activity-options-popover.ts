@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ModalController  } from 'ionic-angular';
+import { IonicPage, NavController, ModalController, NavParams } from 'ionic-angular';
 import { ActivityProvider } from '../../providers/activity/activity';
 import { Activity } from '../../models/activity';
+import { LogProvider } from '../../providers/log/log';
 
 @IonicPage()
 @Component({
@@ -13,11 +14,12 @@ export class ActivityOptionsPopoverPage {
 
   constructor(public navCtrl: NavController,
               private modalCtrl: ModalController, 
-              private activityProvider: ActivityProvider) {
+              private activityProvider: ActivityProvider,
+              private logProvider: LogProvider,
+              private navParams: NavParams) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ActivityOptionsPopoverPage');
   }
 
   createNewActivity() {
@@ -30,4 +32,9 @@ export class ActivityOptionsPopoverPage {
     modal.present();
   }
 
+  logActivity(activity: Activity) {
+    this.navParams.data.forEach(block => {
+      this.logProvider.logActivity(block, activity.$key);
+    });
+  }
 }

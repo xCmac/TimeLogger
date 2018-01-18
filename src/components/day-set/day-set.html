@@ -2,7 +2,7 @@
   <ion-grid>
     <ion-row *ngFor="let row of [0,1,2,3,4,5,6,7]">
       <ion-col *ngFor="let col of [0,1,2]">
-        <time-block name="{{(row + 1) + (8 * col)}}"></time-block>
+        <time-block name="{{(row + 1) + (8 * col)}}" (toggle)="toggleBlock($event)"></time-block>
       </ion-col>
     </ion-row>
     <button ion-button full (click)="showActivityOptionsPopover()">Log Activity</button>
