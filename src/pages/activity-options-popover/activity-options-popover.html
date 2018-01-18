@@ -5,8 +5,8 @@
 <ion-content padding>
   <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let activity of activities | async">
-        <button ion-button full (click)="updateActivity()">{{ activity }}</button>
+      <ion-col *ngFor="let activity of activityProvider.activities | async">
+        <button ion-button full (click)="deleteActivity(activity)">{{ activity.name }}</button>
       </ion-col>
     </ion-row>
     <ion-item>

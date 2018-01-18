@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 import { ActivityProvider } from '../../providers/activity/activity';
 import { Observable } from 'rxjs/Observable';
+import { Activity } from '../../models/activity';
 
 @IonicPage()
 @Component({
@@ -9,14 +10,10 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: 'activity-options-popover.html',
 })
 export class ActivityOptionsPopoverPage {
-
-  activities: Observable<any[]>;
-  newActivity: string = "";
+  newActivity: string = '';
 
   constructor(public navCtrl: NavController, 
               private activityProvider: ActivityProvider) {
-
-    this.activities = this.activityProvider.readActivities();
   }
 
   ionViewDidLoad() {
@@ -25,10 +22,16 @@ export class ActivityOptionsPopoverPage {
 
   createNewActivity() {
     this.activityProvider.createActivity(this.newActivity);
+    this.newActivity = '';
   }
 
-  updateActivity() {
+  updateActivity(activity: Activity) {
     console.log("Updating activity");
+    this.activityProvider.updateActivity(activity.$key, activity.name);
+  }
+
+  deleteActivity(activity: Activity) {
+    this.activityProvider.deleteActivity(activity.$key);
   }
 
 }
