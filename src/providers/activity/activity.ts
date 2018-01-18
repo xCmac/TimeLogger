@@ -43,8 +43,17 @@ export class ActivityProvider {
     this.activitiesRef.push({ name: name });
   }
 
-  public readActivities(): Observable<any[]> {
+  public readActivities() {
     return this.activitiesRef.valueChanges();
+  }
+
+  private convertToActivity(data: any) {
+    let activity: Activity;
+
+    activity.$key = data.key;
+    activity.name = data.payload.val();
+
+    return activity;
   }
 
   public updateActivity(key: string, name: string) {
