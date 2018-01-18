@@ -1,0 +1,32 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Activities</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+<ion-list no-lines>
+
+  <ion-row *ngFor="let activity of activityProvider.activities | async">
+    <ion-col>
+     {{ activity.name }}
+    </ion-col>
+    <ion-col>
+      <ion-buttons end>
+        <button ion-button icon-only>
+          <ion-icon name="hammer" (click)="updateActivity()"></ion-icon>
+        </button>
+        <button ion-button icon-only color="danger" (click)="deleteActivity(activity)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-col>
+  </ion-row>
+  
+</ion-list>
+
+<button ion-button full (click)="closeModal()">Done</button>
+</ion-content>

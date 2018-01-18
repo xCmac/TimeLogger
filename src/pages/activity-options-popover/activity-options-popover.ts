@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { IonicPage, NavController, ModalController  } from 'ionic-angular';
 import { ActivityProvider } from '../../providers/activity/activity';
-import { Observable } from 'rxjs/Observable';
 import { Activity } from '../../models/activity';
 
 @IonicPage()
@@ -12,7 +11,8 @@ import { Activity } from '../../models/activity';
 export class ActivityOptionsPopoverPage {
   newActivity: string = '';
 
-  constructor(public navCtrl: NavController, 
+  constructor(public navCtrl: NavController,
+              private modalCtrl: ModalController, 
               private activityProvider: ActivityProvider) {
   }
 
@@ -25,17 +25,10 @@ export class ActivityOptionsPopoverPage {
     this.newActivity = '';
   }
 
-  updateActivity(activity: Activity) {
-    console.log("Updating activity");
-    this.activityProvider.updateActivity(activity.$key, activity.name);
-  }
-
-  deleteActivity(activity: Activity) {
-    this.activityProvider.deleteActivity(activity.$key);
-  }
-
-  showActivitesCRUDModal() {
+  showActivityEditor() {
     console.log("Showing activities CRUD modal");
+    let modal = this.modalCtrl.create("ActivityEditorPage");
+    modal.present();
   }
 
 }
