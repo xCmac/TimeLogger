@@ -34,7 +34,7 @@ export class LogProvider {
   }
 
   public logActivity(block: number, activityID: string) {
-    let log: Log = this.getLogByBlock(block)
+    let log: Log = this.getLogByBlock(block);
 
     if (!log) {
       this.createNewLog(block, activityID);
@@ -55,7 +55,7 @@ export class LogProvider {
     let data: any = {
       activityID: activityID,
       blockNumber: log.blockNumber
-    }
+    };
 
     this.logsRef.update(log.$key, data);
   }

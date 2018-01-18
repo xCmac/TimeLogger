@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
-import { Observable } from 'rxjs/Observable';
 import { Activity } from '../../models/activity';
 
 @Injectable()
@@ -45,15 +44,6 @@ export class ActivityProvider {
 
   public readActivities() {
     return this.activitiesRef.valueChanges();
-  }
-
-  private convertToActivity(data: any) {
-    let activity: Activity;
-
-    activity.$key = data.key;
-    activity.name = data.payload.val();
-
-    return activity;
   }
 
   public updateActivity(key: string, name: string) {
