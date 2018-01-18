@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
-import { Observable } from 'rxjs/Observable';
 import { ActivityProvider } from '../activity/activity';
 import { Log } from '../../models/log';
-// import { Activity } from '../../models/activity';
 
 @Injectable()
 export class LogProvider {
@@ -28,11 +26,11 @@ export class LogProvider {
           $key: data.key,
           activity: this.activityProvider.getActivityById(data.payload.val().activityID),
           blockNumber: data.payload.val().blockNumber
-        }
+        };
 
         return log;
-      })
-    })
+      });
+    });
   }
 
   public logActivity(block: number, activityID: string) {

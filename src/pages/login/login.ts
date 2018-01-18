@@ -22,7 +22,7 @@ export class LoginPage {
     this.user.email = "a@b.com";
     this.user.password = "123456";
     
-    this.loginForm = formBuilder.group({
+    this.loginForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required])]
     });
@@ -30,7 +30,7 @@ export class LoginPage {
 
   async login() {
     try {
-      await this.authProvider.login(this.user.email, this.user.password)
+      await this.authProvider.login(this.user.email, this.user.password);
       this.navCtrl.setRoot('TabsPage');
     } catch (e) {
       this.presentToast(e.message);
@@ -40,7 +40,7 @@ export class LoginPage {
 
   async register() {
     try {
-      await this.authProvider.register(this.user.email, this.user.password)
+      await this.authProvider.register(this.user.email, this.user.password);
       this.navCtrl.setRoot('TabsPage');
     } catch (e) {
       this.presentToast(e.message);

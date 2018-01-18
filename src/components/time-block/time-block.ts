@@ -10,10 +10,9 @@ export class TimeBlockComponent {
   @Output() toggle: EventEmitter<any> = new EventEmitter<any>();
   selected: boolean = false;
 
-  constructor() {
-  }
+  constructor() {}
 
-  private toggleSelected() {
+  toggleSelected() {
     this.selected = !this.selected;
     this.toggle.emit({
       name: this.name,

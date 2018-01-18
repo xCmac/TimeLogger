@@ -23,7 +23,7 @@ export class DaySetComponent {
 
   toggleBlock(event: any) {
     if (event.selected) {
-      this.selectedBlocks.push(event.name)
+      this.selectedBlocks.push(event.name);
     }
     else {
       let index: number = this.selectedBlocks.indexOf(event.name);

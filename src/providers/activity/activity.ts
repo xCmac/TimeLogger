@@ -18,7 +18,7 @@ export class ActivityProvider {
         let activity: Activity = {
           $key: data.key,
           name: data.payload.val().name
-        }
+        };
 
         return activity;
       });
@@ -29,7 +29,7 @@ export class ActivityProvider {
   public getActivityById(id: string) {
     return this.activities.find(activity => {
       return activity.$key === id;
-    })
+    });
   }
 
   public createDefaultActivities() {
