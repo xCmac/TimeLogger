@@ -12,12 +12,14 @@
 
   <ion-row *ngFor="let activity of activityProvider.activities | async">
     <ion-col>
-     {{ activity.name }}
+     <div>
+      {{ activity.name }}
+     </div>
     </ion-col>
     <ion-col>
       <ion-buttons end>
-        <button ion-button icon-only>
-          <ion-icon name="hammer" (click)="updateActivity()"></ion-icon>
+        <button ion-button icon-only (click)="updateActivity(activity)">
+          <ion-icon name="hammer"></ion-icon>
         </button>
         <button ion-button icon-only color="danger" (click)="deleteActivity(activity)">
           <ion-icon name="trash"></ion-icon>

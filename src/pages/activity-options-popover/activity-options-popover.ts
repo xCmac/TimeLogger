@@ -26,7 +26,6 @@ export class ActivityOptionsPopoverPage {
   }
 
   showActivityEditor() {
-    console.log("Showing activities CRUD modal");
     let modal = this.modalCtrl.create("ActivityEditorPage");
     modal.present();
   }

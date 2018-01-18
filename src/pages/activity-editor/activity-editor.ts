@@ -10,6 +10,8 @@ import { Activity } from '../../models/activity';
 })
 export class ActivityEditorPage {
 
+  isEditing: boolean = false;
+
   constructor(public navCtrl: NavController, 
               private viewCtrl: ViewController, 
               private alertCtrl: AlertController, 
@@ -20,8 +22,37 @@ export class ActivityEditorPage {
     console.log('ionViewDidLoad ActivityEditorPage');
   }
 
-  updateActivity(activity: Activity, name: string) {
-    this.activityProvider.updateActivity(activity.$key, name);
+  updateActivity(activity: Activity) {
+    console.log("Editing called");
+    let alert = this.alertCtrl.create({
+      title: 'Edit',
+      inputs: [
+        {
+          name: 'name',
+          placeholder: activity.name
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            if (String(data).length < 1 ) {
+              return false;
+            } else {
+              this.activityProvider.updateActivity(activity.$key, data);
+            }
+          }
+        }
+      ]
+    });
+    alert.present();
+    
   }
 
   deleteActivity(activity: Activity) {

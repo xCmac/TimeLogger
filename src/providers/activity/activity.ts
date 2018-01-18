@@ -6,7 +6,7 @@ import { Activity } from '../../models/activity';
 @Injectable()
 export class ActivityProvider {
   activitiesRef:  AngularFireList<any>;
-  activities: Observable<Activity[]>
+  activities: Observable<Activity[]>;
 
   constructor(private afDatabase: AngularFireDatabase) {
     console.log('Hello ActivityProvider Provider');
@@ -36,7 +36,7 @@ export class ActivityProvider {
 
   public updateActivity(key: string, name: string) {
     if(!key || !name) return;
-    this.activitiesRef.update(key, { name: name });
+    this.activitiesRef.update(key, name);
   }
 
   public deleteActivity(key: string) {
