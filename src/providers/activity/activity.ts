@@ -12,6 +12,10 @@ export class ActivityProvider {
 
   public setReferences(uid: string) {
     this.activitiesRef = this.afDatabase.list(`activities/${uid}`);
+    this.setActivites();
+  }
+
+  private setActivites() {
     this.activitiesRef.snapshotChanges().subscribe(changes => {
       this.activities = changes.map(data => {
         let activity: Activity = {
@@ -21,7 +25,7 @@ export class ActivityProvider {
 
         return activity;
       });
-      
+
     });
   }
 

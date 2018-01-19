@@ -6,7 +6,7 @@ import { Log } from '../../models/log';
 @Injectable()
 export class LogProvider {
   logsRef: AngularFireList<any>;
-  logs: Log[];
+  logs: Log[] = [];
 
   constructor(private afDatabase: AngularFireDatabase,
               private activityProvider: ActivityProvider) {
@@ -17,9 +17,10 @@ export class LogProvider {
     let date: string = ("0" + logDate.getDate()).slice(-2);
 
     this.logsRef = this.afDatabase.list(`logs/${uid}/${month}${date}${logDate.getFullYear()}`);
+    this.setLogs();
   }
 
-  public getDayLogs(uid: string) {
+  private setLogs() {
     this.logsRef.snapshotChanges().subscribe(changes => {
       this.logs = changes.map(data => {
         let log: Log = {
@@ -27,7 +28,6 @@ export class LogProvider {
           activity: this.activityProvider.getActivityById(data.payload.val().activityID),
           blockNumber: data.payload.val().blockNumber
         };
-
         return log;
       });
     });
