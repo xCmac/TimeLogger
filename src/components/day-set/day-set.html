@@ -2,8 +2,7 @@
   <ion-grid>
     <ion-row>
       <ion-col col-4 *ngFor="let timeblock of timeBlocks">
-        <time-block name={{timeblock.name}} [color]="timeblock.color" (toggle)="toggleBlock($event)">
-        </time-block>
+        <time-block name={{timeblock.name}} [color]="timeblock.color" (toggle)="toggleBlock($event)"></time-block>
       </ion-col>
     </ion-row>
     <button ion-button full (click)="showActivityOptionsPopover()">Log Activity</button>
