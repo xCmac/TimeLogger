@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ViewController, AlertController  } from 'ionic-angular';
+import { IonicPage, NavController, ViewController, AlertController, PopoverController  } from 'ionic-angular';
 import { ActivityProvider } from '../../providers/activity/activity';
 import { Activity } from '../../models/activity';
 
@@ -15,44 +15,13 @@ export class ActivityEditorPage {
   constructor(public navCtrl: NavController, 
               private viewCtrl: ViewController, 
               private alertCtrl: AlertController, 
+              private popoverCtrl: PopoverController,
               private activityProvider: ActivityProvider) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ActivityEditorPage');
-  }
-
-  updateActivity(activity: Activity) {
-    console.log("Editing called");
-    let alert = this.alertCtrl.create({
-      title: 'Edit',
-      inputs: [
-        {
-          name: 'name',
-          placeholder: activity.name
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Save',
-          handler: data => {
-            if (String(data).length < 1 ) {
-              return false;
-            } else {
-              this.activityProvider.updateActivity(activity.$key, data);
-            }
-          }
-        }
-      ]
-    });
-    alert.present();
-    
+  showEditPopover(activity: Activity) {
+    let popover = this.popoverCtrl.create('ActivityNameColorEditorPage', activity);
+    popover.present();
   }
 
   deleteActivity(activity: Activity) {
@@ -63,13 +32,11 @@ export class ActivityEditorPage {
         {
           text: 'Cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         },
         {
           text: 'Delete',
           handler: () => {
-            console.log('Agree clicked');
             this.activityProvider.deleteActivity(activity.$key);
           }
         }

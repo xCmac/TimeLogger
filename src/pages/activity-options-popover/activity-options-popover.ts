@@ -19,9 +19,6 @@ export class ActivityOptionsPopoverPage {
               private navParams: NavParams) {
   }
 
-  ionViewDidLoad() {
-  }
-
   createNewActivity() {
     this.activityProvider.createActivity(this.newActivity);
     this.newActivity = '';

@@ -52,7 +52,7 @@ export class ActivityProvider {
 
   public updateActivity(key: string, name: string) {
     if(!key || !name) return;
-    this.activitiesRef.update(key, name);
+    this.activitiesRef.update(key, { name: name });
   }
 
   public deleteActivity(key: string) {
