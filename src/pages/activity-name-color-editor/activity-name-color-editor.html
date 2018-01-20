@@ -7,8 +7,7 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label floating color="primary">New Name</ion-label>
-          <ion-input type="text" [(ngModel)]="name"></ion-input>
+          <ion-input type="text" placeholder="{{ getActivityName() }}" [(ngModel)]="name" clearInput></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ViewController, NavParams } from 'ionic-angular';
+import { IonicPage, ViewController, NavParams } from 'ionic-angular';
 import { ActivityProvider } from '../../providers/activity/activity';
 
 @IonicPage()
@@ -11,10 +11,13 @@ export class ActivityNameColorEditorPage {
 
   name: string = '';
 
-  constructor(private navCtrl: NavController, 
-              private viewCtrl: ViewController,
+  constructor(private viewCtrl: ViewController,
               private navParams: NavParams,
               private activityProvider: ActivityProvider) {
+  }
+
+  getActivityName(): string {
+    return this.navParams.data.name;
   }
 
   closePopover() {
