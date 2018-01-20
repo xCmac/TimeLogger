@@ -50,9 +50,9 @@ export class ActivityProvider {
     return this.activitiesRef.valueChanges();
   }
 
-  public updateActivity(key: string, name: string) {
-    if(!key || !name) return;
-    this.activitiesRef.update(key, { name: name });
+  public updateActivity(key: string, name: string, color: string) {
+    if(!key || !name || !color) return;
+    this.activitiesRef.update(key, { name: name, color: color });
   }
 
   public deleteActivity(key: string) {

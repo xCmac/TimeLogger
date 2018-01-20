@@ -9,11 +9,17 @@ import { ActivityProvider } from '../../providers/activity/activity';
 })
 export class ActivityNameColorEditorPage {
 
-  name: string = '';
+  name: string;
+  color: string;
 
   constructor(private viewCtrl: ViewController,
               private navParams: NavParams,
               private activityProvider: ActivityProvider) {
+  }
+
+  ngOnInit() {
+    this.name = this.navParams.data.name;
+    this.color = this.navParams.data.color;
   }
 
   getActivityName(): string {
@@ -21,8 +27,11 @@ export class ActivityNameColorEditorPage {
   }
 
   closePopover() {
-    this.activityProvider.updateActivity(this.navParams.data.$key, this.name);
+    this.activityProvider.updateActivity(this.navParams.data.$key, this.name, this.color);
     this.viewCtrl.dismiss();
   }
 
+  onColorSelect(color: any) {
+    this.color = color;
+  }
 }
