@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { PopoverController } from 'ionic-angular';
 import { LogProvider } from '../../providers/log/log';
-import { AuthProvider } from '../../providers/auth/auth';
 import { TimeBlock } from '../../models/timeblock';
 
 @Component({
@@ -14,8 +13,7 @@ export class DaySetComponent {
   timeBlocks: Array<TimeBlock> = [];
 
   constructor(private popoverCtrl: PopoverController,
-              private logProvider: LogProvider,
-              private authProvider: AuthProvider) {
+              private logProvider: LogProvider) {
   }
 
   ngOnInit() {
