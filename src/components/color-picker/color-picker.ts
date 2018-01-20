@@ -30,7 +30,7 @@ export class ColorPickerComponent {
     "grey", 
     "blueGrey",
     "black"
-  ]
+  ];
 
   constructor() {
   }

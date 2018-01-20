@@ -11,6 +11,8 @@
         </ion-item>
       </ion-col>
     </ion-row>
+
+    <color-picker (selected)="onColorSelect($event)" [current]="color"></color-picker>
   </ion-grid>
 
   <button ion-button block (click)="closePopover()">Done</button>
