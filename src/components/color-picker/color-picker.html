@@ -1,0 +1,11 @@
+<div>
+  <ion-grid>
+      <ion-row>
+        <ion-col col-3 *ngFor="let color of colors">
+            <button ion-button round icon-only="color === current" color="{{color}}" (click)="selectColor(color)">
+              <ion-icon *ngIf="color === current"></ion-icon>
+            </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+</div>
