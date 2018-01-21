@@ -20,7 +20,8 @@ export class ActivityProvider {
       this.activities = changes.map(data => {
         let activity: Activity = {
           $key: data.key,
-          name: data.payload.val().name
+          name: data.payload.val().name,
+          color: data.payload.val().color
         };
 
         return activity;
@@ -29,7 +30,7 @@ export class ActivityProvider {
     });
   }
 
-  public getActivityById(id: string) {
+  public getActivityById(id: string): Activity {
     return this.activities.find(activity => {
       return activity.$key === id;
     });

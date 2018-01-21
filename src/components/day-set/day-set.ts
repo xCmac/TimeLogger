@@ -22,9 +22,11 @@ export class DaySetComponent {
 
   private createTimeblocks(numberOfTimeBlocks: number) {
     for (let index = 1; index <= numberOfTimeBlocks; index++) {
+      let logIndex: number = this.logProvider.logs.map(log => +log.blockNumber).indexOf(index);
+
       let timeblock: TimeBlock = {
         name: index,
-        color: this.logProvider.logs.map(log => +log.blockNumber).indexOf(index) > -1 ? 'secondary' : 'default'
+        color: logIndex > -1 ? this.logProvider.logs[logIndex].activity.color : 'default'
       };
 
       this.timeBlocks.push(timeblock);
