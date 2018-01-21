@@ -18,10 +18,9 @@ export class LoginPage {
               private toastCtrl: ToastController, 
               private formBuilder: FormBuilder,
               private authProvider: AuthProvider) {
+  }
 
-    this.user.email = "a@b.com";
-    this.user.password = "123456";
-    
+  ngOnInit() {
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required])]
