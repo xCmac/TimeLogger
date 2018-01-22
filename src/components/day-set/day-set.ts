@@ -9,7 +9,6 @@ import { TimeBlock } from '../../models/timeblock';
 })
 
 export class DaySetComponent {
-  selectedBlocks: Array<number> = [];
   timeBlocks: Array<TimeBlock> = [];
 
   constructor(private popoverCtrl: PopoverController,
@@ -26,7 +25,8 @@ export class DaySetComponent {
 
       let timeblock: TimeBlock = {
         name: index,
-        color: logIndex > -1 ? this.logProvider.logs[logIndex].activity.color : 'default'
+        color: logIndex > -1 ? this.logProvider.logs[logIndex].activity.color : 'default',
+        selected: false
       };
 
       this.timeBlocks.push(timeblock);
@@ -34,18 +34,28 @@ export class DaySetComponent {
   }
 
   showActivityOptionsPopover() {
-    let popover = this.popoverCtrl.create("ActivityOptionsPopoverPage", this.selectedBlocks);
+    let popover = this.popoverCtrl.create("ActivityOptionsPopoverPage", this.getSelectedTimeBlocks());
     popover.present();
+    popover.onDidDismiss(() => {
+      this.timeBlocks.forEach((timeBlock: TimeBlock) => {
+        timeBlock.selected = false;
+      });
+    });
   }
 
-  toggleBlock(event: any) {
-    if (event.selected) {
-      this.selectedBlocks.push(event.name);
-    }
-    else {
-      let index: number = this.selectedBlocks.indexOf(event.name);
-      this.selectedBlocks.splice(index, 1);
-    }
+  getSelectedTimeBlocks(): Array<number> {
+    let selectedBlocks: Array<number> = [];
+    
+    this.timeBlocks.forEach((timeBlock: TimeBlock) => {
+      if (timeBlock.selected) {
+        selectedBlocks.push(timeBlock.name);
+      }
+    });
+
+    return selectedBlocks;
   }
 
+  onSelectedChange(event: any, timeBlock: TimeBlock) {
+    timeBlock.selected = event;
+  }
 }

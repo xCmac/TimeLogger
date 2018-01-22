@@ -8,17 +8,14 @@ export class TimeBlockComponent {
 
   @Input() color: string;
   @Input() name: number;
-  @Output() toggle: EventEmitter<any> = new EventEmitter<any>();
-  selected: boolean = false;
+  @Input() selected: boolean;
+  @Output() selectedChange: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() {}
 
   toggleSelected() {
     this.selected = !this.selected;
-    this.toggle.emit({
-      name: this.name,
-      selected: this.selected
-    });
+    this.selectedChange.emit(this.selected);
   }
 
   isOutline(): boolean {
