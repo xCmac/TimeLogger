@@ -38,4 +38,5 @@ export class ColorPickerComponent {
   selectColor(color: string) {
     this.selected.emit(color);
   }
+
 }
