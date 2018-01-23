@@ -20,7 +20,7 @@ export class LogProvider {
     let date: string = ("0" + logDate.getDate()).slice(-2);
 
     this.logsRef = this.afDatabase.list(`logs/${uid}/${month}${date}${logDate.getFullYear()}`);
-    this.last7DaysRef = this.afDatabase.list(`logs/${uid}`, ref => ref.orderByKey().limitToLast(7));
+    this.last7DaysRef = this.afDatabase.list(`logs/${uid}`, ref => ref.limitToLast(7));
 
     this.setLogs();
     this.setLast7DaysLogs();
@@ -42,6 +42,7 @@ export class LogProvider {
   private setLast7DaysLogs() {
     this.last7DaysRef.snapshotChanges().subscribe(changes => {
       this.last7DaysLogs = changes.map(data => {
+        console.log("Data: ", data.payload.val().activityID);
         let log: Log = {
           $key: data.key,
           activity: this.activityProvider.getActivityById(data.payload.val().activityID),

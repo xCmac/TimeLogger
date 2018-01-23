@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { ActivityProvider } from '../../providers/activity/activity';
+import { LogProvider } from '../../providers/log/log';
 
 @IonicPage()
 @Component({
@@ -11,7 +12,8 @@ export class ChartsPage {
 
   lineChartData: Array<any> = [];
 
-  constructor(private activityProvider: ActivityProvider) {}
+  constructor(private activityProvider: ActivityProvider, 
+              private logProvider: LogProvider) {}
 
   ngOnInit() {
     this.lineChartData = this.activityProvider.activities.map(activity => ({

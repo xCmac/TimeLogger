@@ -15,5 +15,5 @@
     <color-picker (selected)="onColorSelect($event)" [current]="color"></color-picker>
   </ion-grid>
 
-  <button ion-button block color="{{color}}" (click)="closePopover()">Save</button>
+  <button tappable ion-button block color="{{color}}" (click)="closePopover()">Save</button>
 </ion-content>

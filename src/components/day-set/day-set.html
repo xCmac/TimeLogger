@@ -5,6 +5,6 @@
         <time-block name={{timeblock.name}} [selected]="timeblock.selected" [color]="timeblock.color" (selectedChange)="onSelectedChange($event, timeblock)"></time-block>
       </ion-col>
     </ion-row>
-    <button ion-button full (click)="showActivityOptionsPopover()">Log Activity</button>
+    <button tappable ion-button full (click)="showActivityOptionsPopover()">Log Activity</button>
   </ion-grid>
 </div>

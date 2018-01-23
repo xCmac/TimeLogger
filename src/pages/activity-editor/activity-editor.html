@@ -18,10 +18,10 @@
     </ion-col>
     <ion-col>
       <ion-buttons end>
-        <button ion-button icon-only (click)="showEditPopover(activity)">
+        <button tappable ion-button icon-only (click)="showEditPopover(activity)">
           <ion-icon name="hammer"></ion-icon>
         </button>
-        <button ion-button icon-only color="danger" (click)="deleteActivity(activity)">
+        <button tappable ion-button icon-only color="danger" (click)="deleteActivity(activity)">
           <ion-icon name="trash"></ion-icon>
         </button>
       </ion-buttons>
@@ -30,5 +30,5 @@
   
 </ion-list>
 
-<button ion-button full (click)="closeModal()">Done</button>
+<button tappable ion-button full (click)="closeModal()">Done</button>
 </ion-content>

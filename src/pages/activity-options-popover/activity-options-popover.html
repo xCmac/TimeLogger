@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons end>
-      <button ion-button icon-only (click)="showActivityEditor()">
+      <button tappable ion-button icon-only (click)="showActivityEditor()">
         <ion-icon name="settings"></ion-icon>
       </button>
     </ion-buttons>
@@ -12,12 +12,12 @@
   <ion-grid>
     <ion-row>
       <ion-col col-6 *ngFor="let activity of activityProvider.activities">
-        <button ion-button full (click)="logActivity(activity)">{{ activity.name }}</button>
+        <button tappable ion-button full (click)="logActivity(activity)">{{ activity.name }}</button>
       </ion-col>
     </ion-row>
     <ion-item>
       <ion-input type="text" [(ngModel)]="newActivity" placeholder="New Activity"></ion-input>
-      <button ion-button outline item-right (click)="createNewActivity()">Add</button>
+      <button tappable ion-button outline item-right (click)="createNewActivity()">Add</button>
     </ion-item>
   </ion-grid>
 </ion-content>

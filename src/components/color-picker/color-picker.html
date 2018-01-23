@@ -2,7 +2,7 @@
   <ion-grid>
       <ion-row>
         <ion-col col-3 *ngFor="let color of colors">
-            <button ion-button round color="{{color}}" (click)="selectColor(color)">
+            <button tappable ion-button round color="{{color}}" (click)="selectColor(color)">
             </button>
         </ion-col>
       </ion-row>
