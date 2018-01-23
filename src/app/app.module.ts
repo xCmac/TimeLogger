@@ -11,7 +11,6 @@ import { FIREBASE_CREDENTIALS } from "./firebase.credentials";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { ChartsModule } from 'ng2-charts';
 import { AuthProvider } from '../providers/auth/auth';
 import { ActivityProvider } from '../providers/activity/activity';
 import { LogProvider } from '../providers/log/log';
@@ -23,7 +22,6 @@ import { LogProvider } from '../providers/log/log';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    ChartsModule,
     AngularFireModule.initializeApp(FIREBASE_CREDENTIALS),
     AngularFireAuthModule,
     AngularFireDatabaseModule

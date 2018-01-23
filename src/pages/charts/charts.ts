@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
+import { ActivityProvider } from '../../providers/activity/activity';
 
 @IonicPage()
 @Component({
@@ -8,7 +9,15 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ChartsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  lineChartData: Array<any> = [];
+
+  constructor(private activityProvider: ActivityProvider) {}
+
+  ngOnInit() {
+    this.lineChartData = this.activityProvider.activities.map(activity => ({
+      data: [2,7,45,36],
+      label: activity.name
+    }));
   }
 
   ionViewDidLoad() {
@@ -16,12 +25,12 @@ export class ChartsPage {
   }
 
 
-  public lineChartData: Array<any> = [
+  public lineChartDataExample: Array<any> = [
     { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
     { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
     { data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C' }
   ];
-  public lineChartLabels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  public lineChartLabels: Array<any> = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   public lineChartOptions: any = {
     responsive: true
   };

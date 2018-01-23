@@ -8,6 +8,9 @@ export class LogProvider {
   logsRef: AngularFireList<any>;
   logs: Log[] = [];
 
+  last7DaysRef: AngularFireList<any>;
+  last7DaysLogs: Log[] = [];
+
   constructor(private afDatabase: AngularFireDatabase,
               private activityProvider: ActivityProvider) {
   }
@@ -17,7 +20,10 @@ export class LogProvider {
     let date: string = ("0" + logDate.getDate()).slice(-2);
 
     this.logsRef = this.afDatabase.list(`logs/${uid}/${month}${date}${logDate.getFullYear()}`);
+    this.last7DaysRef = this.afDatabase.list(`logs/${uid}`, ref => ref.orderByKey().limitToLast(7));
+
     this.setLogs();
+    this.setLast7DaysLogs();
   }
 
   private setLogs() {
@@ -30,6 +36,20 @@ export class LogProvider {
         };
         return log;
       });
+    });
+  }
+
+  private setLast7DaysLogs() {
+    this.last7DaysRef.snapshotChanges().subscribe(changes => {
+      this.last7DaysLogs = changes.map(data => {
+        let log: Log = {
+          $key: data.key,
+          activity: this.activityProvider.getActivityById(data.payload.val().activityID),
+          blockNumber: data.payload.val().blockNumber
+        };
+        return log;
+      });
+      console.log(this.last7DaysLogs);
     });
   }
 
@@ -64,5 +84,8 @@ export class LogProvider {
     return this.logs.find(log => {
       return log.blockNumber === block;
     });
+  }
+
+  public getLast7Days(currentDate: string) {
   }
 }

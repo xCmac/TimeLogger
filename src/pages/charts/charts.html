@@ -8,19 +8,24 @@
 
 
 <ion-content padding>
-  <div class="row">
-    <div class="col-md-6">
-      <div style="display: block;">
-        <canvas baseChart width="300" height="400" 
+  <ion-card>
+    <ion-card-header>
+      Weekly Trend
+    </ion-card-header>
+    <ion-card-content>
+        <canvas baseChart 
+          width="300" 
+          height="400" 
           [datasets]="lineChartData" 
           [labels]="lineChartLabels" 
           [options]="lineChartOptions"
           [colors]="lineChartColors" 
           [legend]="lineChartLegend" 
           [chartType]="lineChartType" 
-          (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)"></canvas>
-      </div>
-    </div>
-  </div>
+          (chartHover)="chartHovered($event)" 
+          (chartClick)="chartClicked($event)">
+        </canvas>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>
