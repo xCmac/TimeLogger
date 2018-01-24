@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { PopoverController } from 'ionic-angular';
 import { LogProvider } from '../../providers/log/log';
 import { TimeBlock } from '../../models/timeblock';
+import { Log } from '../../models/log';
 
 @Component({
   selector: 'day-set',
@@ -33,6 +34,15 @@ export class DaySetComponent {
     }
   }
 
+  updateTimeBlockColors() {
+    this.timeBlocks.forEach((timeBlock: TimeBlock) => {
+      let currentLog: Log = this.logProvider.getLogByBlock(timeBlock.name)
+      if(currentLog) {
+        timeBlock.color = currentLog.activity.color;
+      }
+    })
+  }
+
   showActivityOptionsPopover() {
     let popover = this.popoverCtrl.create("ActivityOptionsPopoverPage", this.getSelectedTimeBlocks());
     popover.present();
@@ -40,6 +50,7 @@ export class DaySetComponent {
       this.timeBlocks.forEach((timeBlock: TimeBlock) => {
         timeBlock.selected = false;
       });
+      this.updateTimeBlockColors();
     });
   }
 

@@ -81,7 +81,7 @@ export class LogProvider {
     this.logsRef.update(log.$key, data);
   }
 
-  private getLogByBlock(block: number): Log {
+  public getLogByBlock(block: number): Log {
     return this.logs.find(log => {
       return log.blockNumber === block;
     });
