@@ -22,7 +22,7 @@ export class ActivityOptionsPopoverPage {
   }
 
   createNewActivity() {
-    this.activityProvider.createActivity(this.newActivity);
+    // this.activityProvider.createActivity(this.newActivity);
     this.newActivity = '';
   }
 
@@ -34,7 +34,7 @@ export class ActivityOptionsPopoverPage {
   logActivity(activity: Activity) {
     console.log(this.navParams);
     this.navParams.data.forEach(block => {
-      this.logProvider.logActivity(block, activity.$key);
+      this.logProvider.logActivity(block, activity.id);
     });
     this.viewCtrl.dismiss();
   }

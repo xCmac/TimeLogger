@@ -27,7 +27,7 @@ export class ActivityNameColorEditorPage {
   }
 
   closePopover() {
-    this.activityProvider.updateActivity(this.navParams.data.$key, this.name, this.color);
+    // this.activityProvider.updateActivity(this.navParams.data.$key, this.name, this.color);
     this.viewCtrl.dismiss();
   }
 

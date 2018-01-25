@@ -5,17 +5,23 @@ import { Activity } from '../../models/activity';
 
 @Injectable()
 export class ActivityProvider {
-  activitiesCollection: AngularFirestoreCollection<any>;
+  activitiesCollection: AngularFirestoreCollection<Activity>;
   activities: Observable<any>;
 
   constructor(private afs: AngularFirestore) {
   }
 
   public setReferences(uid: string) {
-    this.activitiesCollection = this.afs.collection('activities');
+    this.activitiesCollection = this.afs.collection<Activity>('activities');
     this.activities = this.afs.collection('activities', ref => {
-        return ref.where("userId", "==", uid)
-      }).snapshotChanges();
+        return ref.where("userId", "==", uid);
+      }).snapshotChanges().map(changes => {
+        return changes.map(action => ({
+          id: action.payload.doc.id,
+          name: action.payload.doc.get('name'),
+          color: action.payload.doc.get('color')
+        }));
+      });
   }
 
   public createDefaultActivities(uid: string) {
@@ -26,7 +32,7 @@ export class ActivityProvider {
 
   public getActivity(id: string): Observable<any> {
     if(!id) return;
-    
+
     return this.activitiesCollection.doc(id).snapshotChanges();
   }
 

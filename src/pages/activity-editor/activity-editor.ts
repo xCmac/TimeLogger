@@ -37,7 +37,7 @@ export class ActivityEditorPage {
         {
           text: 'Delete',
           handler: () => {
-            this.activityProvider.deleteActivity(activity.$key);
+            this.activityProvider.deleteActivity(activity.id);
           }
         }
       ]

@@ -1,5 +1,6 @@
 export interface Activity {
-    $key?: string;
+    id?: string;
+    userId: string;
     name: string;
     color?: string;
 }
