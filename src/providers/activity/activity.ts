@@ -12,7 +12,7 @@ export class ActivityProvider {
   }
 
   public setReferences(uid: string) {
-    this.activitiesCollection = this.afs.collection<Activity>('activities');
+    this.activitiesCollection = this.afs.collection('activities');
     this.activities = this.afs.collection('activities', ref => {
         return ref.where("userId", "==", uid);
       }).snapshotChanges().map(changes => {
