@@ -24,6 +24,12 @@ export class ActivityProvider {
     this.activitiesCollection.add({userId: uid, name: "Hobbies", color: "purple"});
   }
 
+  public getActivity(id: string): Observable<any> {
+    if(!id) return;
+    
+    return this.activitiesCollection.doc(id).snapshotChanges();
+  }
+
   public createActivity(uid: string, name: string, color?: string) {
     if(!name) return;
 
