@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { Activity } from '../../models/activity';
 
 @Injectable()
@@ -7,12 +10,18 @@ export class ActivityProvider {
   activitiesRef:  AngularFireList<any>;
   activities: Activity[];
 
-  constructor(private afDatabase: AngularFireDatabase) {
+  activitiesDocument: AngularFirestoreDocument<any>;
+  activitiesFS: Observable<any>;
+
+  constructor(private afDatabase: AngularFireDatabase, private afs: AngularFirestore) {
   }
 
   public setReferences(uid: string) {
     this.activitiesRef = this.afDatabase.list(`activities/${uid}`);
     this.setActivites();
+
+    this.activitiesDocument = this.afs.doc(`activities/${uid}`);
+    this.activitiesFS = this.activitiesDocument.valueChanges();
   }
 
   private setActivites() {
@@ -36,10 +45,11 @@ export class ActivityProvider {
     });
   }
 
-  public createDefaultActivities() {
-    this.activitiesRef.push({ name: 'work' });
-    this.activitiesRef.push({ name: 'sleep' });
-    this.activitiesRef.push({ name: 'hobbies' });
+  public createDefaultActivities(uid: string) {
+    this.activitiesDocument.set({ activities: ['work', 'sleep', 'hobbies'] });
+    this.activitiesFS.subscribe(data => {
+      console.log(data);
+    });
   }
 
   public createActivity(name: string) {

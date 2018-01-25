@@ -9,6 +9,9 @@
 </ion-header>
 
 <ion-content padding>
+  <div *ngFor"let activity of activityProvider.activitiesFS | async">
+    {{ activity }}
+  </div>
   <ion-grid>
     <ion-row>
       <ion-col col-6 *ngFor="let activity of activityProvider.activities">

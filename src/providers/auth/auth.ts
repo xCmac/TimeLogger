@@ -1,6 +1,7 @@
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { ActivityProvider } from '../activity/activity';
 import { LogProvider } from '../log/log';
 
@@ -9,8 +10,12 @@ export class AuthProvider {
 
   user: any;
 
+  usersCollection: AngularFirestoreCollection<any>;
+
+
   constructor(private afAuth: AngularFireAuth, 
               private afDatabase: AngularFireDatabase,
+              private afs: AngularFirestore,
               private activityProvider: ActivityProvider,
               private logProvider: LogProvider) {
     this.afAuth.authState.subscribe(user => {
@@ -18,6 +23,8 @@ export class AuthProvider {
         this.user = user; 
       }
     });
+
+    this.usersCollection = this.afs.collection(`users/`);
   }
 
   async login(email: string, password: string) {
@@ -34,7 +41,9 @@ export class AuthProvider {
       .set({email: email });
       this.activityProvider.setReferences(this.user.uid);
       this.logProvider.setReferences(this.user.uid, new Date());
-      this.activityProvider.createDefaultActivities();
+      this.activityProvider.createDefaultActivities(this.user.uid);
+      
+      this.usersCollection.doc(this.user.uid).set({email: email});
     }
   }
 
