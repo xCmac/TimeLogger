@@ -16,10 +16,10 @@ export class ChartsPage {
               private logProvider: LogProvider) {}
 
   ngOnInit() {
-    this.lineChartData = this.activityProvider.activities.map(activity => ({
-      data: [2,7,45,36],
-      label: activity.name
-    }));
+    // this.lineChartData = this.activityProvider.activities.map(activity => ({
+    //   data: [2,7,45,36],
+    //   label: activity.name
+    // }));
   }
 
   ionViewDidLoad() {
