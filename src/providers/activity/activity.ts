@@ -9,7 +9,8 @@ export class ActivityProvider {
   activitiesCollection: AngularFirestoreCollection<Activity>;
   activities: Observable<Activity[]>;
 
-  constructor(private afs: AngularFirestore, private userProvider: UserProvider) {
+  constructor(private afs: AngularFirestore, 
+              private userProvider: UserProvider) {
   }
 
   public setReferences(uid: string) {
@@ -26,10 +27,10 @@ export class ActivityProvider {
       });
   }
 
-  public createDefaultActivities(uid: string) {
-    this.activitiesCollection.add({userId: uid, name: "Work", color: "red"});
-    this.activitiesCollection.add({userId: uid, name: "Sleep", color: "pink"});
-    this.activitiesCollection.add({userId: uid, name: "Hobbies", color: "purple"});
+  public createDefaultActivities() {
+    this.activitiesCollection.add({userId: this.userProvider.userId, name: "Work", color: "red"});
+    this.activitiesCollection.add({userId: this.userProvider.userId, name: "Sleep", color: "pink"});
+    this.activitiesCollection.add({userId: this.userProvider.userId, name: "Hobbies", color: "purple"});
   }
 
   public createActivity(name: string, color?: string) {

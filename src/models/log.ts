@@ -1,7 +1,10 @@
 import { Activity } from "./activity";
 
 export interface Log {
-    $key: string;
-    activity: Activity;
+    id?: string;
+    userId: string;
+    date: string | Date;
+    activity?: Activity;
+    activityId?: string;
     blockNumber: number;
 }
