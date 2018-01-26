@@ -4,9 +4,7 @@ import { Injectable } from '@angular/core';
 export class UserProvider {
   private _userId: string;
 
-  constructor() {
-    console.log('Hello UserProvider Provider');
-  }
+  constructor() {}
 
   get userId(): string {
     return this._userId;

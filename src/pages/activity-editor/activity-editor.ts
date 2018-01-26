@@ -17,6 +17,7 @@ export class ActivityEditorPage {
               private alertCtrl: AlertController, 
               private popoverCtrl: PopoverController,
               private activityProvider: ActivityProvider) {
+
   }
 
   showEditPopover(activity: Activity) {

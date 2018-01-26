@@ -31,7 +31,7 @@ export class LogProvider {
       this.logs = changes.map(data => {
         let log: any = {
           $key: data.key,
-          activity: this.activityProvider.getActivity(data.payload.val().activityID),
+          
           blockNumber: data.payload.val().blockNumber
         };
         return log;
@@ -45,7 +45,7 @@ export class LogProvider {
         console.log("Data: ", data.payload.val().activityID);
         let log: any = {
           $key: data.key,
-          activity: this.activityProvider.getActivity(data.payload.val().activityID),
+
           blockNumber: data.payload.val().blockNumber
         };
         return log;

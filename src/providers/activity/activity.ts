@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/shareReplay';
 import { Activity } from '../../models/activity';
 import { UserProvider } from '../user/user';
 
@@ -23,7 +24,7 @@ export class ActivityProvider {
           name: action.payload.doc.get('name'),
           color: action.payload.doc.get('color')
         }));
-      });
+      }).shareReplay();
   }
 
   public createDefaultActivities(uid: string) {
@@ -35,14 +36,14 @@ export class ActivityProvider {
   public createActivity(name: string, color?: string) {
     if(!name) return;
 
-    console.log(`Name: ${name}`);
     this.activitiesCollection.add({userId: this.userProvider.userId, name: name, color: "purple"});
   }
 
-  public updateActivity(activityId: string, activity: Activity) {
-    if(!activityId || !activity) return;
+  public updateActivity(activity: Activity) {
+    console.log("activity: ", activity);
+    if(!activity) return;
 
-    this.afs.doc(`activities/${activityId}`).update(activity);
+    this.afs.doc(`activities/${activity.id}`).update(activity);
   }
 
   public deleteActivity(activityId: string) {
