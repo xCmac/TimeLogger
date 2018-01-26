@@ -10,7 +10,8 @@ export class ActivityProvider {
   activitiesCollection: AngularFirestoreCollection<Activity>;
   activities: Observable<Activity[]>;
 
-  constructor(private afs: AngularFirestore, private userProvider: UserProvider) {
+  constructor(private afs: AngularFirestore, 
+              private userProvider: UserProvider) {
   }
 
   public setReferences(uid: string) {
@@ -27,10 +28,10 @@ export class ActivityProvider {
       }).shareReplay();
   }
 
-  public createDefaultActivities(uid: string) {
-    this.activitiesCollection.add({userId: uid, name: "Work", color: "red"});
-    this.activitiesCollection.add({userId: uid, name: "Sleep", color: "pink"});
-    this.activitiesCollection.add({userId: uid, name: "Hobbies", color: "purple"});
+  public createDefaultActivities() {
+    this.activitiesCollection.add({userId: this.userProvider.userId, name: "Work", color: "red"});
+    this.activitiesCollection.add({userId: this.userProvider.userId, name: "Sleep", color: "pink"});
+    this.activitiesCollection.add({userId: this.userProvider.userId, name: "Hobbies", color: "purple"});
   }
 
   public createActivity(name: string, color?: string) {
@@ -40,10 +41,13 @@ export class ActivityProvider {
   }
 
   public updateActivity(activity: Activity) {
-    console.log("activity: ", activity);
     if(!activity) return;
 
-    this.afs.doc(`activities/${activity.id}`).update(activity);
+    this.afs.doc<Activity>(`activities/${activity.id}`).update({ 
+      userId: activity.userId,
+      name: activity.name,
+      color: activity.color
+    });
   }
 
   public deleteActivity(activityId: string) {

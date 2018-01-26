@@ -36,7 +36,7 @@ export class AuthProvider {
     if (this.user) {
       this.activityProvider.setReferences(this.user.uid);
       this.logProvider.setReferences(this.user.uid, new Date());
-      this.activityProvider.createDefaultActivities(this.user.uid);
+      this.activityProvider.createDefaultActivities();
       
       this.usersCollection.add({email: email, userId: this.user.uid});
     }
