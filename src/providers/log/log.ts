@@ -29,7 +29,7 @@ export class LogProvider {
   private setLogs() {
     this.logsRef.snapshotChanges().subscribe(changes => {
       this.logs = changes.map(data => {
-        let log: Log = {
+        let log: any = {
           $key: data.key,
           activity: this.activityProvider.getActivity(data.payload.val().activityID),
           blockNumber: data.payload.val().blockNumber
@@ -43,7 +43,7 @@ export class LogProvider {
     this.last7DaysRef.snapshotChanges().subscribe(changes => {
       this.last7DaysLogs = changes.map(data => {
         console.log("Data: ", data.payload.val().activityID);
-        let log: Log = {
+        let log: any = {
           $key: data.key,
           activity: this.activityProvider.getActivity(data.payload.val().activityID),
           blockNumber: data.payload.val().blockNumber
