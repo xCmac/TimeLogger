@@ -11,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class LoginPage {
 
-  user = {email: 'a@b.com', password: '123456'} as User;
+  user = {email: 'a33@b33.com', password: '123456'};
   loginForm: FormGroup;
 
   constructor(public navCtrl: NavController, 

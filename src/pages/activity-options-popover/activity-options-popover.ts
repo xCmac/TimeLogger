@@ -22,7 +22,7 @@ export class ActivityOptionsPopoverPage {
   }
 
   createNewActivity() {
-    // this.activityProvider.createActivity(this.newActivity);
+    this.activityProvider.createActivity(this.newActivity);
     this.newActivity = '';
   }
 
@@ -38,4 +38,6 @@ export class ActivityOptionsPopoverPage {
     });
     this.viewCtrl.dismiss();
   }
+
+  
 }

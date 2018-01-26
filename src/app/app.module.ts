@@ -15,6 +15,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthProvider } from '../providers/auth/auth';
 import { ActivityProvider } from '../providers/activity/activity';
 import { LogProvider } from '../providers/log/log';
+import { UserProvider } from '../providers/user/user';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { LogProvider } from '../providers/log/log';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider,
     ActivityProvider,
-    LogProvider
+    LogProvider,
+    UserProvider
   ]
 })
 export class AppModule {}

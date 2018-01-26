@@ -2,22 +2,24 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { Activity } from '../../models/activity';
+import { UserProvider } from '../user/user';
 
 @Injectable()
 export class ActivityProvider {
   activitiesCollection: AngularFirestoreCollection<Activity>;
-  activities: Observable<any>;
+  activities: Observable<Activity[]>;
 
-  constructor(private afs: AngularFirestore) {
+  constructor(private afs: AngularFirestore, private userProvider: UserProvider) {
   }
 
   public setReferences(uid: string) {
-    this.activitiesCollection = this.afs.collection('activities');
+    this.activitiesCollection = this.afs.collection<Activity>('activities');
     this.activities = this.afs.collection('activities', ref => {
         return ref.where("userId", "==", uid);
       }).snapshotChanges().map(changes => {
         return changes.map(action => ({
           id: action.payload.doc.id,
+          userId: action.payload.doc.get('userId'),
           name: action.payload.doc.get('name'),
           color: action.payload.doc.get('color')
         }));
@@ -30,16 +32,11 @@ export class ActivityProvider {
     this.activitiesCollection.add({userId: uid, name: "Hobbies", color: "purple"});
   }
 
-  public getActivity(id: string): Observable<any> {
-    if(!id) return;
-
-    return this.activitiesCollection.doc(id).snapshotChanges();
-  }
-
-  public createActivity(uid: string, name: string, color?: string) {
+  public createActivity(name: string, color?: string) {
     if(!name) return;
 
-    this.activitiesCollection.add({userId: uid, name: name, color: "purple"});
+    console.log(`Name: ${name}`);
+    this.activitiesCollection.add({userId: this.userProvider.userId, name: name, color: "purple"});
   }
 
   public updateActivity(activityId: string, activity: Activity) {

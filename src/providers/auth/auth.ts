@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { ActivityProvider } from '../activity/activity';
 import { LogProvider } from '../log/log';
+import { UserProvider } from '../user/user';
 
 @Injectable()
 export class AuthProvider {
@@ -12,10 +13,12 @@ export class AuthProvider {
   constructor(private afAuth: AngularFireAuth, 
               private afs: AngularFirestore,
               private activityProvider: ActivityProvider,
+              private userProvider: UserProvider,
               private logProvider: LogProvider) {
     this.afAuth.authState.subscribe(user => {
       if(user) { 
-        this.user = user; 
+        this.user = user;
+        this.userProvider.userId = user.uid;
       }
     });
 
@@ -41,6 +44,10 @@ export class AuthProvider {
 
   async logout() {
     this.afAuth.auth.signOut();
+  }
+
+  public getUserId(): string {
+    return this.user.uid;
   }
 
 }
