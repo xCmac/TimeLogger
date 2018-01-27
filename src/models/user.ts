@@ -1,4 +1,4 @@
 export interface User {
-    uid: string;
-    emai: string;
+    userId: string;
+    email: string;
 }

@@ -1,7 +1,6 @@
 {
   "rules": {
     "no-duplicate-variable": true,
-    "no-any": true,
     "semicolon": [
       true,
       "always"

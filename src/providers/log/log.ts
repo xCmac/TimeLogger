@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { ActivityProvider } from '../activity/activity';
 import { Log } from '../../models/log';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
