@@ -5,6 +5,7 @@ import { Log } from '../../models/log';
 import { Activity } from '../../models/activity';
 import { AngularFirestoreCollection, AngularFirestore, fromDocRef } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/flatMap';
 import { UserProvider } from '../user/user';
 
 @Injectable()
@@ -20,6 +21,20 @@ export class LogProvider {
 
   public setReferences(uid: string, logDate: Date) {
     this.logsCollection = this.afs.collection('logs');
+    // this.logs = this.afs.collection('logs', ref => {
+    //   return ref.where("userId", "==", uid);
+    // }).snapshotChanges().map(changes => {
+    //   return changes.map(action => {
+    //     return {
+    //       id: action.payload.doc.id,
+    //       userId: action.payload.doc.get('userId'),
+    //       activityId: action.payload.doc.get('activityId'),
+    //       date: action.payload.doc.get('date'),
+    //       blockNumber: action.payload.doc.get('blockNumber')
+    //     }
+    //   });
+    // }).shareReplay();
+
     this.logs = this.afs.collection('logs', ref => {
       return ref.where("userId", "==", uid);
     }).snapshotChanges().map(changes => {
@@ -32,7 +47,12 @@ export class LogProvider {
           blockNumber: action.payload.doc.get('blockNumber')
         }
       });
-    }).shareReplay();
+    }).map((result, index) => {
+      return result.map((log: Log) => {
+        log.activity = this.activityProvider.getActivityObservableById(log.activityId)
+        return log;
+      })
+    })
   }
 
   public getLogObservableByBlockNumber(blockNumber: number): Observable<any> {
