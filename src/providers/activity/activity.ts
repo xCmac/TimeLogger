@@ -40,6 +40,14 @@ export class ActivityProvider {
     this.activitiesCollection.add({userId: this.userProvider.userId, name: name, color: "purple"});
   }
 
+  public getActivityObservableById(id: string): Observable<any> {
+    return this.activities.map(activities => {
+      return activities.find(activity => {
+        return activity.id === id;
+      });
+    });
+  }
+
   public updateActivity(activity: Activity) {
     if(!activity) return;
 

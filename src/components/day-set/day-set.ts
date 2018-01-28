@@ -22,25 +22,46 @@ export class DaySetComponent {
 
   private createTimeblocks(numberOfTimeBlocks: number) {
     for (let index = 1; index <= numberOfTimeBlocks; index++) {
-      let logIndex: number = this.logProvider.logs.map(log => +log.blockNumber).indexOf(index);
-
-      let timeblock: TimeBlock = {
-        name: index,
-        color: logIndex > -1 ? this.logProvider.logs[logIndex].activity.color : 'default',
-        selected: false
-      };
-
-      this.timeBlocks.push(timeblock);
+      this.logProvider.getLogObservableByBlockNumber(index).subscribe(log => {
+        let timeblock: TimeBlock = {
+          logId: log ? log.id : null,
+          name: index,
+          color: log ? log.activity.color : 'default',
+          selected: false
+        };
+  
+        this.timeBlocks.push(timeblock);
+      });
     }
   }
 
+  // private getLogByBlockNumber(blockNumber: number): any {
+  //   let logReturned: Log = null;
+
+  //   this.logProvider.getLogObservableByBlockNumber(blockNumber).subscribe(log => {
+  //     if (!log) {
+  //       return;
+  //     }
+
+  //     logReturned = {
+  //       id: log.id,
+  //       userId: log.userId,
+  //       date: log.date,
+  //       activity: log.activity,
+  //       blockNumber: log.blockNumber
+  //     }
+  //   });
+
+  //   return logReturned;
+  // }
+
   updateTimeBlockColors() {
-    this.timeBlocks.forEach((timeBlock: TimeBlock) => {
-      let currentLog: Log = this.logProvider.getLogByBlock(timeBlock.name)
-      if(currentLog) {
-        timeBlock.color = currentLog.activity.color;
-      }
-    })
+    // this.timeBlocks.forEach((timeBlock: TimeBlock) => {
+    //   let currentLog: Log = this.getLogByBlockNumber(timeBlock.name);
+    //   if(currentLog) {
+    //     timeBlock.color = currentLog.activity.color;
+    //   }
+    // })
   }
 
   showActivityOptionsPopover() {

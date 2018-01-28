@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { ActivityProvider } from '../activity/activity';
 import { Log } from '../../models/log';
-import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
+import { Activity } from '../../models/activity';
+import { AngularFirestoreCollection, AngularFirestore, fromDocRef } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { UserProvider } from '../user/user';
 
 @Injectable()
 export class LogProvider {
   logsCollection: AngularFirestoreCollection<Log>;
-  logs: Observable<any>;
+  logs: Observable<Log[]>;
   today: Date;
 
   constructor(private afs: AngularFirestore,
@@ -18,20 +19,31 @@ export class LogProvider {
   }
 
   public setReferences(uid: string, logDate: Date) {
-    logDate.setHours(0, 0, 0, 0);
-    this.today = logDate;
-
     this.logsCollection = this.afs.collection('logs');
     this.logs = this.afs.collection('logs', ref => {
       return ref.where("userId", "==", uid);
     }).snapshotChanges().map(changes => {
-      return changes.map(action => ({
-        id: action.payload.doc.id,
-        userId: action.payload.doc.get('userId'),
-        date: action.payload.doc.get('date'),
-        blockNumber: action.payload.doc.get('blockNumber'),
-        activityId: action.payload.doc.get('activityId') 
-      }));
+      return changes.map(action => {
+        return {
+          id: action.payload.doc.id,
+          userId: action.payload.doc.get('userId'),
+          activityId: action.payload.doc.get('activityId'),
+          date: action.payload.doc.get('date'),
+          blockNumber: action.payload.doc.get('blockNumber')
+        }
+      });
+    }).shareReplay();
+  }
+
+  public getLogObservableByBlockNumber(blockNumber: number): Observable<any> {
+    if (!this.logs) {
+      return;
+    }
+
+    return this.logs.map(logs => {
+      return logs.find(log => {
+        return log.blockNumber == blockNumber;
+      })
     });
   }
 

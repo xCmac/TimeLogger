@@ -3,6 +3,9 @@ import { IonicPage, NavController, ToastController  } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { User } from "../../models/user";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LogProvider } from '../../providers/log/log';
+import { ActivityProvider } from '../../providers/activity/activity';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 
 @IonicPage()
 @Component({
@@ -11,13 +14,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class LoginPage {
 
-  user = {email: 'a33@b33.com', password: '123456'};
+  user = {email: 'aaaa@b.com', password: '123456'};
   loginForm: FormGroup;
 
   constructor(public navCtrl: NavController, 
               private toastCtrl: ToastController, 
               private formBuilder: FormBuilder,
-              private authProvider: AuthProvider) {
+              private authProvider: AuthProvider,
+              private logProvider: LogProvider,
+              private activityProvider: ActivityProvider) {
   }
 
   ngOnInit() {
@@ -31,6 +36,12 @@ export class LoginPage {
     try {
       await this.authProvider.login(this.user.email, this.user.password);
       this.navCtrl.setRoot('TabsPage');
+
+      // forkJoin(this.activityProvider.activities, this.logProvider.logs).subscribe(([activities, logs]) => {
+      //   if(activities && logs) {
+      //     this.navCtrl.setRoot('TabsPage');
+      //   }
+      // });
     } catch (e) {
       this.presentToast(e.message);
       console.error(e);
@@ -40,7 +51,12 @@ export class LoginPage {
   async register() {
     try {
       await this.authProvider.register(this.user.email, this.user.password);
-      this.navCtrl.setRoot('TabsPage');
+      
+      forkJoin(this.activityProvider.activities, this.logProvider.logs).subscribe(([activities, logs]) => {
+        if(activities && logs) {
+          this.navCtrl.setRoot('TabsPage');
+        }
+      });
     } catch (e) {
       this.presentToast(e.message);
       console.error(e);
