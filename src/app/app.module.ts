@@ -6,6 +6,7 @@ import { MyApp } from './app.component';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { FIREBASE_CREDENTIALS } from "./firebase.credentials";
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -14,6 +15,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthProvider } from '../providers/auth/auth';
 import { ActivityProvider } from '../providers/activity/activity';
 import { LogProvider } from '../providers/log/log';
+import { UserProvider } from '../providers/user/user';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { LogProvider } from '../providers/log/log';
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(FIREBASE_CREDENTIALS),
     AngularFireAuthModule,
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    AngularFirestoreModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -37,7 +40,8 @@ import { LogProvider } from '../providers/log/log';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider,
     ActivityProvider,
-    LogProvider
+    LogProvider,
+    UserProvider
   ]
 })
 export class AppModule {}

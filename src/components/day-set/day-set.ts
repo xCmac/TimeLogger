@@ -3,6 +3,7 @@ import { PopoverController } from 'ionic-angular';
 import { LogProvider } from '../../providers/log/log';
 import { TimeBlock } from '../../models/timeblock';
 import { Log } from '../../models/log';
+import { Activity } from '../../models/activity';
 
 @Component({
   selector: 'day-set',
@@ -22,25 +23,49 @@ export class DaySetComponent {
 
   private createTimeblocks(numberOfTimeBlocks: number) {
     for (let index = 1; index <= numberOfTimeBlocks; index++) {
-      let logIndex: number = this.logProvider.logs.map(log => +log.blockNumber).indexOf(index);
-
-      let timeblock: TimeBlock = {
-        name: index,
-        color: logIndex > -1 ? this.logProvider.logs[logIndex].activity.color : 'default',
-        selected: false
-      };
-
-      this.timeBlocks.push(timeblock);
+      this.logProvider.getLogObservableByBlockNumber(index).subscribe((log: Log) => {
+        if (log) {
+          log.activity.subscribe((activity: Activity) => {
+            this.upsertTimeblock(index, log, activity);
+          });
+        } else {
+          this.upsertTimeblock(index);
+        }
+      });
     }
   }
 
-  updateTimeBlockColors() {
-    this.timeBlocks.forEach((timeBlock: TimeBlock) => {
-      let currentLog: Log = this.logProvider.getLogByBlock(timeBlock.name)
-      if(currentLog) {
-        timeBlock.color = currentLog.activity.color;
-      }
-    })
+  private upsertTimeblock(name: number, log?: Log, activity?: Activity) {
+    let timeBlock: TimeBlock = this.getTimeblock(name);
+    if(timeBlock && activity) {
+      timeBlock.color = activity.color;
+    } else if (!timeBlock) {
+      this.createTimeblock(name, log, activity);
+    }
+  }
+
+  private createTimeblock(name: number, log?: Log, activity?: Activity) {
+    let timeblock: TimeBlock = {
+      logId: log ? log.id : null,
+      name: name,
+      color: log ? activity.color : 'default',
+      selected: false
+    };
+
+    this.timeBlocks.push(timeblock);
+    this.sortTimeblocks();
+  }
+
+  private sortTimeblocks() {
+    this.timeBlocks.sort((a: TimeBlock, b: TimeBlock) => {
+      return a.name - b.name;
+    });
+  }
+
+  private getTimeblock(blockNumber: number) {
+    return this.timeBlocks.find((timeBlock: TimeBlock) => {
+      return timeBlock.name == blockNumber;
+    });
   }
 
   showActivityOptionsPopover() {
@@ -50,16 +75,15 @@ export class DaySetComponent {
       this.timeBlocks.forEach((timeBlock: TimeBlock) => {
         timeBlock.selected = false;
       });
-      this.updateTimeBlockColors();
     });
   }
 
-  getSelectedTimeBlocks(): Array<number> {
-    let selectedBlocks: Array<number> = [];
+  getSelectedTimeBlocks(): Array<TimeBlock> {
+    let selectedBlocks: Array<TimeBlock> = [];
     
     this.timeBlocks.forEach((timeBlock: TimeBlock) => {
       if (timeBlock.selected) {
-        selectedBlocks.push(timeBlock.name);
+        selectedBlocks.push(timeBlock);
       }
     });
 

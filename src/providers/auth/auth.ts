@@ -1,23 +1,29 @@
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { ActivityProvider } from '../activity/activity';
 import { LogProvider } from '../log/log';
+import { UserProvider } from '../user/user';
+import { User } from '../../models/user';
 
 @Injectable()
 export class AuthProvider {
-
   user: any;
+  usersCollection: AngularFirestoreCollection<User>;
 
   constructor(private afAuth: AngularFireAuth, 
-              private afDatabase: AngularFireDatabase,
+              private afs: AngularFirestore,
               private activityProvider: ActivityProvider,
+              private userProvider: UserProvider,
               private logProvider: LogProvider) {
     this.afAuth.authState.subscribe(user => {
       if(user) { 
-        this.user = user; 
+        this.user = user;
+        this.userProvider.userId = user.uid;
       }
     });
+
+    this.usersCollection = this.afs.collection(`users/`);
   }
 
   async login(email: string, password: string) {
@@ -29,17 +35,20 @@ export class AuthProvider {
   async register(email: string, password: string) {
     this.user = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
     if (this.user) {
-      this.afDatabase.database.ref('/users')
-      .child(this.user.uid)
-      .set({email: email });
       this.activityProvider.setReferences(this.user.uid);
       this.logProvider.setReferences(this.user.uid, new Date());
       this.activityProvider.createDefaultActivities();
+      
+      this.usersCollection.add({email: email, userId: this.user.uid});
     }
   }
 
   async logout() {
     this.afAuth.auth.signOut();
+  }
+
+  public getUserId(): string {
+    return this.user.uid;
   }
 
 }

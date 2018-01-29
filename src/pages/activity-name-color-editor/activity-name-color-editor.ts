@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, ViewController, NavParams } from 'ionic-angular';
 import { ActivityProvider } from '../../providers/activity/activity';
+import { Activity } from '../../models/activity';
 
 @IonicPage()
 @Component({
@@ -9,8 +10,7 @@ import { ActivityProvider } from '../../providers/activity/activity';
 })
 export class ActivityNameColorEditorPage {
 
-  name: string;
-  color: string;
+  activity: Activity;
 
   constructor(private viewCtrl: ViewController,
               private navParams: NavParams,
@@ -18,20 +18,19 @@ export class ActivityNameColorEditorPage {
   }
 
   ngOnInit() {
-    this.name = this.navParams.data.name;
-    this.color = this.navParams.data.color;
+    this.activity = this.navParams.data;
   }
 
   getActivityName(): string {
-    return this.navParams.data.name;
+    return this.activity.name;
   }
 
   closePopover() {
-    this.activityProvider.updateActivity(this.navParams.data.$key, this.name, this.color);
+    this.activityProvider.updateActivity(this.activity);
     this.viewCtrl.dismiss();
   }
 
-  onColorSelect(color: any) {
-    this.color = color;
+  onColorSelect(color: string) {
+    this.activity.color = color;
   }
 }

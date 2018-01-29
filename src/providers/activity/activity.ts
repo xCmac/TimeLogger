@@ -1,63 +1,66 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/shareReplay';
 import { Activity } from '../../models/activity';
+import { UserProvider } from '../user/user';
 
 @Injectable()
 export class ActivityProvider {
-  activitiesRef:  AngularFireList<any>;
-  activities: Activity[];
+  activitiesCollection: AngularFirestoreCollection<Activity>;
+  activities: Observable<Activity[]>;
 
-  constructor(private afDatabase: AngularFireDatabase) {
+  constructor(private afs: AngularFirestore, 
+              private userProvider: UserProvider) {
   }
 
   public setReferences(uid: string) {
-    this.activitiesRef = this.afDatabase.list(`activities/${uid}`);
-    this.setActivites();
-  }
-
-  private setActivites() {
-    this.activitiesRef.snapshotChanges().subscribe(changes => {
-      this.activities = changes.map(data => {
-        let activity: Activity = {
-          $key: data.key,
-          name: data.payload.val().name,
-          color: data.payload.val().color
-        };
-
-        return activity;
-      });
-
-    });
-  }
-
-  public getActivityById(id: string): Activity {
-    return this.activities.find(activity => {
-      return activity.$key === id;
-    });
+    this.activitiesCollection = this.afs.collection<Activity>('activities');
+    this.activities = this.afs.collection('activities', ref => {
+        return ref.where("userId", "==", uid);
+      }).snapshotChanges().map(changes => {
+        return changes.map(action => ({
+          id: action.payload.doc.id,
+          userId: action.payload.doc.get('userId'),
+          name: action.payload.doc.get('name'),
+          color: action.payload.doc.get('color')
+        }));
+      }).shareReplay();
   }
 
   public createDefaultActivities() {
-    this.activitiesRef.push({ name: 'work' });
-    this.activitiesRef.push({ name: 'sleep' });
-    this.activitiesRef.push({ name: 'hobbies' });
+    this.activitiesCollection.add({userId: this.userProvider.userId, name: "Work", color: "red"});
+    this.activitiesCollection.add({userId: this.userProvider.userId, name: "Sleep", color: "pink"});
+    this.activitiesCollection.add({userId: this.userProvider.userId, name: "Hobbies", color: "purple"});
   }
 
-  public createActivity(name: string) {
+  public createActivity(name: string, color?: string) {
     if(!name) return;
-    this.activitiesRef.push({ name: name });
+
+    this.activitiesCollection.add({userId: this.userProvider.userId, name: name, color: "purple"});
   }
 
-  public readActivities() {
-    return this.activitiesRef.valueChanges();
+  public getActivityObservableById(id: string): Observable<any> {
+    return this.activities.map(activities => {
+      return activities.find(activity => {
+        return activity.id === id;
+      });
+    });
   }
 
-  public updateActivity(key: string, name: string, color: string) {
-    if(!key || !name || !color) return;
-    this.activitiesRef.update(key, { name: name, color: color });
+  public updateActivity(activity: Activity) {
+    if(!activity) return;
+
+    this.afs.doc<Activity>(`activities/${activity.id}`).update({ 
+      userId: activity.userId,
+      name: activity.name,
+      color: activity.color
+    });
   }
 
-  public deleteActivity(key: string) {
-    if(!key) return;
-    this.activitiesRef.remove(key); 
+  public deleteActivity(activityId: string) {
+    if(!activityId) return;
+
+    this.afs.doc(`activities/${activityId}`).delete();
   }
 }

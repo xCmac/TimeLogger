@@ -17,6 +17,7 @@ export class ActivityEditorPage {
               private alertCtrl: AlertController, 
               private popoverCtrl: PopoverController,
               private activityProvider: ActivityProvider) {
+
   }
 
   showEditPopover(activity: Activity) {
@@ -37,7 +38,7 @@ export class ActivityEditorPage {
         {
           text: 'Delete',
           handler: () => {
-            this.activityProvider.deleteActivity(activity.$key);
+            this.activityProvider.deleteActivity(activity.id);
           }
         }
       ]

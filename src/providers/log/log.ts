@@ -1,92 +1,82 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { ActivityProvider } from '../activity/activity';
 import { Log } from '../../models/log';
+import { Activity } from '../../models/activity';
+import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
+import { UserProvider } from '../user/user';
+import { TimeBlock } from '../../models/timeblock';
 
 @Injectable()
 export class LogProvider {
-  logsRef: AngularFireList<any>;
-  logs: Log[] = [];
+  logsCollection: AngularFirestoreCollection<Log>;
+  logs: Observable<Log[]>;
+  today: Date;
 
-  last7DaysRef: AngularFireList<any>;
-  last7DaysLogs: Log[] = [];
-
-  constructor(private afDatabase: AngularFireDatabase,
-              private activityProvider: ActivityProvider) {
+  constructor(private afs: AngularFirestore,
+              private activityProvider: ActivityProvider,
+              private userProvider: UserProvider) {
   }
 
   public setReferences(uid: string, logDate: Date) {
-    let month: string = ("0" + (logDate.getMonth() + 1)).slice(-2);
-    let date: string = ("0" + logDate.getDate()).slice(-2);
-
-    this.logsRef = this.afDatabase.list(`logs/${uid}/${month}${date}${logDate.getFullYear()}`);
-    this.last7DaysRef = this.afDatabase.list(`logs/${uid}`, ref => ref.limitToLast(7));
-
-    this.setLogs();
-    this.setLast7DaysLogs();
-  }
-
-  private setLogs() {
-    this.logsRef.snapshotChanges().subscribe(changes => {
-      this.logs = changes.map(data => {
-        let log: Log = {
-          $key: data.key,
-          activity: this.activityProvider.getActivityById(data.payload.val().activityID),
-          blockNumber: data.payload.val().blockNumber
+    this.logsCollection = this.afs.collection('logs');
+    this.logs = this.afs.collection('logs', ref => {
+      return ref.where("userId", "==", uid);
+    }).snapshotChanges().map(changes => {
+      return changes.map(action => {
+        return {
+          id: action.payload.doc.id,
+          userId: action.payload.doc.get('userId'),
+          activityId: action.payload.doc.get('activityId'),
+          date: action.payload.doc.get('date'),
+          blockNumber: action.payload.doc.get('blockNumber')
         };
+      });
+    }).map((result, index) => {
+      return result.map((log: Log) => {
+        log.activity = this.activityProvider.getActivityObservableById(log.activityId);
         return log;
       });
     });
   }
 
-  private setLast7DaysLogs() {
-    this.last7DaysRef.snapshotChanges().subscribe(changes => {
-      this.last7DaysLogs = changes.map(data => {
-        console.log("Data: ", data.payload.val().activityID);
-        let log: Log = {
-          $key: data.key,
-          activity: this.activityProvider.getActivityById(data.payload.val().activityID),
-          blockNumber: data.payload.val().blockNumber
-        };
-        return log;
+  public getLogObservableByBlockNumber(blockNumber: number): Observable<any> {
+    if (!this.logs) {
+      return;
+    }
+
+    return this.logs.map(logs => {
+      return logs.find(log => {
+        return log.blockNumber == blockNumber;
       });
-      console.log(this.last7DaysLogs);
     });
   }
 
-  public logActivity(block: number, activityID: string) {
-    let log: Log = this.getLogByBlock(block);
-
-    if (!log) {
-      this.createNewLog(block, activityID);
-    }
-    else {
-      this.updateLog(log, activityID);
-    }
-  }
-
-  private createNewLog(block: number, activityID: string) {
-    this.logsRef.push({
-      blockNumber: block,
-      activityID: activityID
-    });
-  }
-
-  private updateLog(log: Log, activityID: string) {
-    let data: any = {
-      activityID: activityID,
-      blockNumber: log.blockNumber
+  public logActivity(timeBlock: TimeBlock, activity: Activity) {
+    let log: Log = {
+      userId: this.userProvider.userId,
+      date: new Date().toISOString(),
+      activityId: activity.id,
+      blockNumber: timeBlock.name,
     };
 
-    this.logsRef.update(log.$key, data);
+    if (!timeBlock.logId) {
+      this.createNewLog(log);
+    } else {
+      this.updateLog(log, timeBlock.logId);
+    }
   }
 
-  public getLogByBlock(block: number): Log {
-    return this.logs.find(log => {
-      return log.blockNumber === block;
+  private createNewLog(log: Log) {
+    this.logsCollection.add(log);
+  }
+
+  private updateLog(log: Log, logId: string) {
+    this.afs.doc<Log>(`logs/${logId}`).update({
+      userId: log.userId,
+      date: log.date,
+      blockNumber: log.blockNumber,
+      activityId: log.activityId
     });
-  }
-
-  public getLast7Days(currentDate: string) {
   }
 }
