@@ -111,12 +111,12 @@ export class DaySetComponent {
     });
   }
 
-  getSelectedTimeBlocks(): Array<number> {
-    let selectedBlocks: Array<number> = [];
+  getSelectedTimeBlocks(): Array<TimeBlock> {
+    let selectedBlocks: Array<TimeBlock> = [];
     
     this.timeBlocks.forEach((timeBlock: TimeBlock) => {
       if (timeBlock.selected) {
-        selectedBlocks.push(timeBlock.name);
+        selectedBlocks.push(timeBlock);
       }
     });
 

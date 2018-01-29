@@ -5,6 +5,7 @@ import { Activity } from '../../models/activity';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { UserProvider } from '../user/user';
+import { TimeBlock } from '../../models/timeblock';
 
 @Injectable()
 export class LogProvider {
@@ -29,14 +30,14 @@ export class LogProvider {
           activityId: action.payload.doc.get('activityId'),
           date: action.payload.doc.get('date'),
           blockNumber: action.payload.doc.get('blockNumber')
-        }
+        };
       });
     }).map((result, index) => {
       return result.map((log: Log) => {
-        log.activity = this.activityProvider.getActivityObservableById(log.activityId)
+        log.activity = this.activityProvider.getActivityObservableById(log.activityId);
         return log;
-      })
-    })
+      });
+    });
   }
 
   public getLogObservableByBlockNumber(blockNumber: number): Observable<any> {
@@ -47,26 +48,22 @@ export class LogProvider {
     return this.logs.map(logs => {
       return logs.find(log => {
         return log.blockNumber == blockNumber;
-      })
+      });
     });
   }
 
-  private setLast7DaysLogs() {
-  }
-
-  public logActivity(timeBlock: number, activity: Activity) {
+  public logActivity(timeBlock: TimeBlock, activity: Activity) {
     let log: Log = {
       userId: this.userProvider.userId,
       date: new Date().toISOString(),
       activityId: activity.id,
-      blockNumber: timeBlock,
-    }
-    if (!log.id) {
+      blockNumber: timeBlock.name,
+    };
+
+    if (!timeBlock.logId) {
       this.createNewLog(log);
-    }
-    else {
-      console.log("updating");
-      this.updateLog(log);
+    } else {
+      this.updateLog(log, timeBlock.logId);
     }
   }
 
@@ -74,16 +71,12 @@ export class LogProvider {
     this.logsCollection.add(log);
   }
 
-  private updateLog(log: Log) {
-    console.log(`Updating: ${log}`);
-    this.afs.doc<Log>(`logs/${log.id}`).update({
+  private updateLog(log: Log, logId: string) {
+    this.afs.doc<Log>(`logs/${logId}`).update({
       userId: log.userId,
       date: log.date,
       blockNumber: log.blockNumber,
       activityId: log.activityId
     });
-  }
-
-  public getLast7Days(currentDate: string) {
   }
 }

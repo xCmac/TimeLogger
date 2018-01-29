@@ -4,6 +4,7 @@ import { ActivityProvider } from '../../providers/activity/activity';
 import { Activity } from '../../models/activity';
 import { LogProvider } from '../../providers/log/log';
 import { ViewController } from 'ionic-angular/navigation/view-controller';
+import { TimeBlock } from '../../models/timeblock';
 
 @IonicPage()
 @Component({
@@ -32,7 +33,7 @@ export class ActivityOptionsPopoverPage {
   }
 
   logActivity(activity: Activity) {
-    this.navParams.data.forEach(block => {
+    this.navParams.data.forEach((block: TimeBlock) => {
       this.logProvider.logActivity(block, activity);
     });
     this.viewCtrl.dismiss();
