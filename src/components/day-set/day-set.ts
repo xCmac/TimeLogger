@@ -68,35 +68,6 @@ export class DaySetComponent {
     });
   }
 
-  // private getLogByBlockNumber(blockNumber: number): any {
-  //   let logReturned: Log = null;
-
-  //   this.logProvider.getLogObservableByBlockNumber(blockNumber).subscribe(log => {
-  //     if (!log) {
-  //       return;
-  //     }
-
-  //     logReturned = {
-  //       id: log.id,
-  //       userId: log.userId,
-  //       date: log.date,
-  //       activity: log.activity,
-  //       blockNumber: log.blockNumber
-  //     }
-  //   });
-
-  //   return logReturned;
-  // }
-
-  // updateTimeBlockColors() {
-    // this.timeBlocks.forEach((timeBlock: TimeBlock) => {
-    //   let currentLog: Log = this.getLogByBlockNumber(timeBlock.name);
-    //   if(currentLog) {
-    //     timeBlock.color = currentLog.activity.color;
-    //   }
-    // })
-  // }
-
   showActivityOptionsPopover() {
     let popover = this.popoverCtrl.create("ActivityOptionsPopoverPage", this.getSelectedTimeBlocks());
     popover.present();
@@ -104,7 +75,6 @@ export class DaySetComponent {
       this.timeBlocks.forEach((timeBlock: TimeBlock) => {
         timeBlock.selected = false;
       });
-      // this.updateTimeBlockColors();
     });
   }
 
