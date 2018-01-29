@@ -1,14 +1,15 @@
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { ActivityProvider } from '../activity/activity';
 import { LogProvider } from '../log/log';
 import { UserProvider } from '../user/user';
+import { User } from '../../models/user';
 
 @Injectable()
 export class AuthProvider {
   user: any;
-  usersCollection: AngularFirestoreCollection<any>;
+  usersCollection: AngularFirestoreCollection<User>;
 
   constructor(private afAuth: AngularFireAuth, 
               private afs: AngularFirestore,
