@@ -65,6 +65,7 @@ export class LogProvider {
       this.createNewLog(log);
     }
     else {
+      console.log("updating");
       this.updateLog(log);
     }
   }
@@ -74,6 +75,7 @@ export class LogProvider {
   }
 
   private updateLog(log: Log) {
+    console.log(`Updating: ${log}`);
     this.afs.doc<Log>(`logs/${log.id}`).update({
       userId: log.userId,
       date: log.date,

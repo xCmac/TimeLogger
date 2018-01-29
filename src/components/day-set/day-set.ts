@@ -42,7 +42,7 @@ export class DaySetComponent {
     if(timeBlock && activity) {
       timeBlock.color = activity.color;
     }
-    else {
+    else if (!timeBlock) {
       this.createTimeblock(name, log, activity);
     }
   }
@@ -91,14 +91,14 @@ export class DaySetComponent {
   //   return logReturned;
   // }
 
-  updateTimeBlockColors() {
+  // updateTimeBlockColors() {
     // this.timeBlocks.forEach((timeBlock: TimeBlock) => {
     //   let currentLog: Log = this.getLogByBlockNumber(timeBlock.name);
     //   if(currentLog) {
     //     timeBlock.color = currentLog.activity.color;
     //   }
     // })
-  }
+  // }
 
   showActivityOptionsPopover() {
     let popover = this.popoverCtrl.create("ActivityOptionsPopoverPage", this.getSelectedTimeBlocks());
@@ -107,7 +107,7 @@ export class DaySetComponent {
       this.timeBlocks.forEach((timeBlock: TimeBlock) => {
         timeBlock.selected = false;
       });
-      this.updateTimeBlockColors();
+      // this.updateTimeBlockColors();
     });
   }
 
