@@ -32,11 +32,10 @@ export class ActivityOptionsPopoverPage {
   }
 
   logActivity(activity: Activity) {
-    // console.log(this.navParams);
-    // this.navParams.data.forEach(block => {
-    //   this.logProvider.logActivity(block, activity.id);
-    // });
-    // this.viewCtrl.dismiss();
+    this.navParams.data.forEach(block => {
+      this.logProvider.logActivity(block, activity);
+    });
+    this.viewCtrl.dismiss();
   }
 
   

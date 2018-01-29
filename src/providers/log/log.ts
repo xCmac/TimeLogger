@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivityProvider } from '../activity/activity';
 import { Log } from '../../models/log';
 import { Activity } from '../../models/activity';
-import { AngularFirestoreCollection, AngularFirestore, fromDocRef } from 'angularfire2/firestore';
+import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { UserProvider } from '../user/user';
 
@@ -54,7 +54,13 @@ export class LogProvider {
   private setLast7DaysLogs() {
   }
 
-  public logActivity(log: Log) {
+  public logActivity(timeBlock: number, activity: Activity) {
+    let log: Log = {
+      userId: this.userProvider.userId,
+      date: new Date().toISOString(),
+      activityId: activity.id,
+      blockNumber: timeBlock,
+    }
     if (!log.id) {
       this.createNewLog(log);
     }
