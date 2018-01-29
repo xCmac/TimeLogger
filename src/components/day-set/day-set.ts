@@ -3,6 +3,7 @@ import { PopoverController } from 'ionic-angular';
 import { LogProvider } from '../../providers/log/log';
 import { TimeBlock } from '../../models/timeblock';
 import { Log } from '../../models/log';
+import { Activity } from '../../models/activity';
 
 @Component({
   selector: 'day-set',
@@ -22,17 +23,35 @@ export class DaySetComponent {
 
   private createTimeblocks(numberOfTimeBlocks: number) {
     for (let index = 1; index <= numberOfTimeBlocks; index++) {
-      this.logProvider.getLogObservableByBlockNumber(index).subscribe(log => {
-        let timeblock: TimeBlock = {
-          logId: log ? log.id : null,
-          name: index,
-          color: log ? log.activity.color : 'default',
-          selected: false
-        };
-  
-        this.timeBlocks.push(timeblock);
-      });
+      this.logProvider.getLogObservableByBlockNumber(index).subscribe((log: Log) => {
+        if (log) {
+          log.activity.subscribe((activity: Activity) => {
+            this.createTimeblock(index, log, activity);
+          })
+        }
+        else {
+          this.createTimeblock(index);
+        }
+      })
     }
+  }
+
+  private createTimeblock(name: number, log?: Log, activity?: Activity) {
+    let timeblock: TimeBlock = {
+      logId: log ? log.id : null,
+      name: name,
+      color: log ? activity.color : 'default',
+      selected: false
+    };
+
+    this.timeBlocks.push(timeblock);
+    this.sortTimeblocks();
+  }
+
+  private sortTimeblocks() {
+    this.timeBlocks.sort((a: TimeBlock, b: TimeBlock) => {
+      return a.name - b.name;
+    })
   }
 
   // private getLogByBlockNumber(blockNumber: number): any {
