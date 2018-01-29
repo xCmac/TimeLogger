@@ -4,7 +4,6 @@ import { LogProvider } from '../../providers/log/log';
 import { TimeBlock } from '../../models/timeblock';
 import { Log } from '../../models/log';
 import { Activity } from '../../models/activity';
-import { TimeBlockComponent } from '../time-block/time-block';
 
 @Component({
   selector: 'day-set',
@@ -28,12 +27,11 @@ export class DaySetComponent {
         if (log) {
           log.activity.subscribe((activity: Activity) => {
             this.upsertTimeblock(index, log, activity);
-          })
-        }
-        else {
+          });
+        } else {
           this.upsertTimeblock(index);
         }
-      })
+      });
     }
   }
 
@@ -41,8 +39,7 @@ export class DaySetComponent {
     let timeBlock: TimeBlock = this.getTimeblock(name);
     if(timeBlock && activity) {
       timeBlock.color = activity.color;
-    }
-    else if (!timeBlock) {
+    } else if (!timeBlock) {
       this.createTimeblock(name, log, activity);
     }
   }
@@ -62,7 +59,7 @@ export class DaySetComponent {
   private sortTimeblocks() {
     this.timeBlocks.sort((a: TimeBlock, b: TimeBlock) => {
       return a.name - b.name;
-    })
+    });
   }
 
   private getTimeblock(blockNumber: number) {
