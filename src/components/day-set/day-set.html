@@ -1,4 +1,10 @@
 <div>
+  <div *ngFor="let log of logProvider.last7DaysLogs | async">
+    {{log.activityId}} <br> 
+    {{log.userId}} <br> 
+    {{log.date}} <br> 
+    {{log.blockNumber}}
+  </div>
   <ion-grid>
     <ion-row>
       <ion-col col-4 *ngFor="let timeblock of timeBlocks">

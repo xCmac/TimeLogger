@@ -11,6 +11,7 @@ import { TimeBlock } from '../../models/timeblock';
 export class LogProvider {
   logsCollection: AngularFirestoreCollection<Log>;
   logs: Observable<Log[]>;
+  last7DaysLogs: Observable<Log[]>;
   today: Date;
 
   constructor(private afs: AngularFirestore,
@@ -38,6 +39,31 @@ export class LogProvider {
         return log;
       });
     });
+
+    this.last7DaysLogs = this.afs.collection('logs', ref => {
+      let date = new Date();
+      console.log(date);
+      date.setDate(date.getDate() - 2);
+      return ref.where("userId", "==", uid).where("date", ">=", date);
+    }).snapshotChanges().map(changes => {
+      console.log("Changes : ", changes);
+      return changes.map(action => {
+        console.log("WTF");
+        return {
+          id: action.payload.doc.id,
+          userId: action.payload.doc.get('userId'),
+          activityId: action.payload.doc.get('activityId'),
+          date: action.payload.doc.get('date'),
+          blockNumber: action.payload.doc.get('blockNumber')
+        };
+      });
+    }).map((result, index) => {
+      console.log("wtf2");
+      return result.map((log: Log) => {
+        log.activity = this.activityProvider.getActivityObservableById(log.activityId);
+        return log;
+      });
+    });
   }
 
   public getLogObservableByBlockNumber(blockNumber: number): Observable<any> {
@@ -55,7 +81,7 @@ export class LogProvider {
   public logActivity(timeBlock: TimeBlock, activity: Activity) {
     let log: Log = {
       userId: this.userProvider.userId,
-      date: new Date().toISOString(),
+      date: new Date(),
       activityId: activity.id,
       blockNumber: timeBlock.name,
     };
