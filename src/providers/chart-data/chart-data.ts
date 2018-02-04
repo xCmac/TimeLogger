@@ -8,17 +8,15 @@ import { UserProvider } from '../user/user';
 
 @Injectable()
 export class ChartDataProvider {
-  last7DaysLogs: Observable<Log[]>;
+  private _last7DaysLogs: Observable<Log[]>;
 
   constructor(private afs: AngularFirestore,
     private activityProvider: ActivityProvider,
     private userProvider: UserProvider) {
   }
 
-  public setLast7DaysData() {
-    let uid = this.userProvider.userId;
-
-    this.last7DaysLogs = this.afs.collection('logs', ref => {
+  public setReferences(uid: string) {
+    this._last7DaysLogs = this.afs.collection('logs', ref => {
       let date = new Date();
       date.setDate(date.getDate() - 7);
       return ref.where("userId", "==", uid).where("date", ">=", date);
@@ -38,6 +36,10 @@ export class ChartDataProvider {
         return log;
       });
     });
+  }
+
+  get last7DaysLogs(): Observable<Log[]> {
+    return this._last7DaysLogs;
   }
 
 }
