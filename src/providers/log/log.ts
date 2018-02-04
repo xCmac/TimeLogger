@@ -11,7 +11,6 @@ import { TimeBlock } from '../../models/timeblock';
 export class LogProvider {
   logsCollection: AngularFirestoreCollection<Log>;
   logs: Observable<Log[]>;
-  last7DaysLogs: Observable<Log[]>;
   today: Date;
 
   constructor(private afs: AngularFirestore,
@@ -23,27 +22,6 @@ export class LogProvider {
     this.logsCollection = this.afs.collection('logs');
     this.logs = this.afs.collection('logs', ref => {
       return ref.where("userId", "==", uid);
-    }).snapshotChanges().map(changes => {
-      return changes.map(action => {
-        return {
-          id: action.payload.doc.id,
-          userId: action.payload.doc.get('userId'),
-          activityId: action.payload.doc.get('activityId'),
-          date: action.payload.doc.get('date'),
-          blockNumber: action.payload.doc.get('blockNumber')
-        };
-      });
-    }).map((result, index) => {
-      return result.map((log: Log) => {
-        log.activity = this.activityProvider.getActivityObservableById(log.activityId);
-        return log;
-      });
-    });
-
-    this.last7DaysLogs = this.afs.collection('logs', ref => {
-      let date = new Date();
-      date.setDate(date.getDate() - 7);
-      return ref.where("userId", "==", uid).where("date", ">=", date);
     }).snapshotChanges().map(changes => {
       return changes.map(action => {
         return {

@@ -16,6 +16,7 @@ import { AuthProvider } from '../providers/auth/auth';
 import { ActivityProvider } from '../providers/activity/activity';
 import { LogProvider } from '../providers/log/log';
 import { UserProvider } from '../providers/user/user';
+import { ChartDataProvider } from '../providers/chart-data/chart-data';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { UserProvider } from '../providers/user/user';
     AuthProvider,
     ActivityProvider,
     LogProvider,
-    UserProvider
+    UserProvider,
+    ChartDataProvider
   ]
 })
 export class AppModule {}

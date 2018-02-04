@@ -4,6 +4,7 @@ import { ActivityProvider } from '../../providers/activity/activity';
 import { LogProvider } from '../../providers/log/log';
 import { Log } from '../../models/log';
 import 'rxjs/add/operator/groupBy';
+import { ChartDataProvider } from '../../providers/chart-data/chart-data';
 
 @IonicPage()
 @Component({
@@ -11,17 +12,16 @@ import 'rxjs/add/operator/groupBy';
   templateUrl: 'charts.html',
 })
 export class ChartsPage {
-
   barChart7DayData: Array<any> = [];
   barChart7DayLabels: Array<any> = [];
 
   constructor(private activityProvider: ActivityProvider, 
-              private logProvider: LogProvider) {}
+              private logProvider: LogProvider,
+              private chartDataProvider: ChartDataProvider) {}
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ChartsPage');
-
-    this.logProvider.last7DaysLogs.subscribe((logs: Array<Log>) => {
+    this.chartDataProvider.last7DaysLogs.subscribe((logs: Array<Log>) => {
       let datesOnly: Array<Date> = [];
       let sorted: Array<Array<Log>> = [];
 
@@ -52,6 +52,10 @@ export class ChartsPage {
   public barChartLabels: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
   public barChartType: string = 'bar';
   public barChartLegend: boolean = true;
+
+  public pieChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
+  public pieChartData:number[] = [300, 500, 100];
+  public pieChartType:string = 'pie';
 
   public barChartData: any[] = [
     { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
