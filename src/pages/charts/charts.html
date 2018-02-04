@@ -10,12 +10,13 @@
 <ion-content padding>
   <canvas baseChart 
     [datasets]="barChartData" 
-    [labels]="barChart7DayLabels" 
+    [labels]="barChartLabels" 
     [options]="barChartOptions" 
     [legend]="barChartLegend"
     [chartType]="barChartType" 
     (chartHover)="chartHovered($event)" 
-    (chartClick)="chartClicked($event)">
+    (chartClick)="chartClicked($event)"
+    *ngIf="barChartData">
   </canvas>
   <canvas baseChart
           [data]="pieChartData"
