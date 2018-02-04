@@ -42,13 +42,10 @@ export class LogProvider {
 
     this.last7DaysLogs = this.afs.collection('logs', ref => {
       let date = new Date();
-      console.log(date);
-      date.setDate(date.getDate() - 2);
+      date.setDate(date.getDate() - 7);
       return ref.where("userId", "==", uid).where("date", ">=", date);
     }).snapshotChanges().map(changes => {
-      console.log("Changes : ", changes);
       return changes.map(action => {
-        console.log("WTF");
         return {
           id: action.payload.doc.id,
           userId: action.payload.doc.get('userId'),
@@ -58,7 +55,6 @@ export class LogProvider {
         };
       });
     }).map((result, index) => {
-      console.log("wtf2");
       return result.map((log: Log) => {
         log.activity = this.activityProvider.getActivityObservableById(log.activityId);
         return log;

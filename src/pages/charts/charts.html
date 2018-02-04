@@ -8,24 +8,13 @@
 
 
 <ion-content padding>
-  <ion-card>
-    <ion-card-header>
-      Weekly Trend
-    </ion-card-header>
-    <ion-card-content>
-        <canvas baseChart 
-          width="300" 
-          height="400" 
-          [datasets]="lineChartData" 
-          [labels]="lineChartLabels" 
-          [options]="lineChartOptions"
-          [colors]="lineChartColors" 
-          [legend]="lineChartLegend" 
-          [chartType]="lineChartType" 
-          (chartHover)="chartHovered($event)" 
-          (chartClick)="chartClicked($event)">
-        </canvas>
-    </ion-card-content>
-  </ion-card>
-
+  <canvas baseChart 
+    [datasets]="barChartData" 
+    [labels]="barChart7DayLabels" 
+    [options]="barChartOptions" 
+    [legend]="barChartLegend"
+    [chartType]="barChartType" 
+    (chartHover)="chartHovered($event)" 
+    (chartClick)="chartClicked($event)">
+  </canvas>
 </ion-content>

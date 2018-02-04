@@ -19,10 +19,6 @@ export class DaySetComponent {
 
   ngOnInit() {
     this.createTimeblocks(24);
-    this.logProvider.last7DaysLogs.subscribe(d => {
-      console.log("wtf3");
-      console.log(d);
-    })
   }
 
   private createTimeblocks(numberOfTimeBlocks: number) {
