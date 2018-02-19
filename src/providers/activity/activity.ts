@@ -4,13 +4,16 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/shareReplay';
 import { Activity } from '../../models/activity';
 import { UserProvider } from '../user/user';
+import { LogProvider } from '../log/log';
 
 @Injectable()
 export class ActivityProvider {
   activitiesCollection: AngularFirestoreCollection<Activity>;
+
   activities: Observable<Activity[]>;
 
   constructor(private afs: AngularFirestore, 
+              private logProvider: LogProvider,
               private userProvider: UserProvider) {
   }
 
@@ -19,12 +22,24 @@ export class ActivityProvider {
     this.activities = this.afs.collection('activities', ref => {
         return ref.where("userId", "==", uid);
       }).snapshotChanges().map(changes => {
-        return changes.map(action => ({
-          id: action.payload.doc.id,
-          userId: action.payload.doc.get('userId'),
-          name: action.payload.doc.get('name'),
-          color: action.payload.doc.get('color')
-        }));
+        return changes.map(action => {
+          if(action.type === "modified") {
+            this.afs.collection('logs', ref => {
+              return ref.where("userId", "==", uid).where("activity.id", "==", action.payload.doc.id);
+            });
+          }
+
+          if(action.type === "removed") {
+            console.log("Activity Removed");
+          }
+
+          return {
+            id: action.payload.doc.id,
+            userId: action.payload.doc.get('userId'),
+            name: action.payload.doc.get('name'),
+            color: action.payload.doc.get('color')
+          };
+        });
       }).shareReplay();
   }
 

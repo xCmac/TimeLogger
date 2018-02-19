@@ -25,9 +25,7 @@ export class DaySetComponent {
     for (let index = 1; index <= numberOfTimeBlocks; index++) {
       this.logProvider.getLogObservableByBlockNumber(index).subscribe((log: Log) => {
         if (log) {
-          log.activity.subscribe((activity: Activity) => {
-            this.upsertTimeblock(index, log, activity);
-          });
+          this.upsertTimeblock(index, log);
         } else {
           this.upsertTimeblock(index);
         }
@@ -35,23 +33,23 @@ export class DaySetComponent {
     }
   }
 
-  private upsertTimeblock(name: number, log?: Log, activity?: Activity) {
+  private upsertTimeblock(name: number, log?: Log) {
     let timeBlock: TimeBlock = this.getTimeblock(name);
-    if(timeBlock && activity) {
-      timeBlock.color = activity.color;
+    if(timeBlock && log) {
+      timeBlock.logId = log.id;
+      timeBlock.color = log.activity.color;
     } else if (!timeBlock) {
-      this.createTimeblock(name, log, activity);
+      this.createTimeblock(name, log);
     }
   }
 
-  private createTimeblock(name: number, log?: Log, activity?: Activity) {
+  private createTimeblock(name: number, log?: Log) {
     let timeblock: TimeBlock = {
       logId: log ? log.id : null,
       name: name,
-      color: log ? activity.color : 'default',
+      color: log ? log.activity.color : 'default',
       selected: false
     };
-
     this.timeBlocks.push(timeblock);
     this.sortTimeblocks();
   }
@@ -86,7 +84,6 @@ export class DaySetComponent {
         selectedBlocks.push(timeBlock);
       }
     });
-
     return selectedBlocks;
   }
 
