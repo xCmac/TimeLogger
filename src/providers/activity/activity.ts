@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection, DocumentChangeAction } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/shareReplay';
+import 'rxjs/add/operator/first';
 import { Activity } from '../../models/activity';
+import { Log } from '../../models/log';
 import { UserProvider } from '../user/user';
-import { LogProvider } from '../log/log';
 
 @Injectable()
 export class ActivityProvider {
@@ -12,8 +13,7 @@ export class ActivityProvider {
 
   activities: Observable<Activity[]>;
 
-  constructor(private afs: AngularFirestore, 
-              private logProvider: LogProvider,
+  constructor(private afs: AngularFirestore,
               private userProvider: UserProvider) {
   }
 
@@ -24,9 +24,7 @@ export class ActivityProvider {
       }).snapshotChanges().map(changes => {
         return changes.map(action => {
           if(action.type === "modified") {
-            this.afs.collection('logs', ref => {
-              return ref.where("userId", "==", uid).where("activity.id", "==", action.payload.doc.id);
-            });
+            this.updateLogsAfterActivityModification(uid, action);
           }
 
           if(action.type === "removed") {
@@ -41,6 +39,30 @@ export class ActivityProvider {
           };
         });
       }).shareReplay();
+  }
+
+  private updateLogsAfterActivityModification(uid: string, action: DocumentChangeAction) {
+    this.afs.collection('logs', ref => {
+      return ref.where("userId", "==", uid).where("activity.id", "==", action.payload.doc.id);
+    }).snapshotChanges().map(changes => {
+      return changes.map(action => {
+        return action.payload.doc.id;
+      });
+    }).first().subscribe(logIds => {
+      var batch = this.afs.firestore.batch();
+      logIds.forEach(id => {
+        batch.update(this.afs.doc<Log>(`logs/${id}`).ref, {
+          "activity": {
+            id: action.payload.doc.id,
+            userId: uid,
+            name: action.payload.doc.get('name'),
+            color: action.payload.doc.get('color')
+          }
+        });
+      });
+
+      batch.commit();
+    });
   }
 
   public createDefaultActivities() {

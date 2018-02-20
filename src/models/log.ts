@@ -1,5 +1,4 @@
 import { Activity } from "./activity";
-import { Observable } from 'rxjs/Observable';
 
 export interface Log {
     id?: string;
