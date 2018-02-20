@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection, DocumentChangeAction } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/shareReplay';
+import 'rxjs/add/operator/first';
 import { Activity } from '../../models/activity';
+import { Log } from '../../models/log';
 import { UserProvider } from '../user/user';
 
 @Injectable()
 export class ActivityProvider {
   activitiesCollection: AngularFirestoreCollection<Activity>;
+
   activities: Observable<Activity[]>;
 
-  constructor(private afs: AngularFirestore, 
+  constructor(private afs: AngularFirestore,
               private userProvider: UserProvider) {
   }
 
@@ -19,13 +22,47 @@ export class ActivityProvider {
     this.activities = this.afs.collection('activities', ref => {
         return ref.where("userId", "==", uid);
       }).snapshotChanges().map(changes => {
-        return changes.map(action => ({
-          id: action.payload.doc.id,
-          userId: action.payload.doc.get('userId'),
-          name: action.payload.doc.get('name'),
-          color: action.payload.doc.get('color')
-        }));
+        return changes.map(action => {
+          if(action.type === "modified") {
+            this.updateLogsAfterActivityModification(uid, action);
+          }
+
+          if(action.type === "removed") {
+            console.log("Activity Removed");
+          }
+
+          return {
+            id: action.payload.doc.id,
+            userId: action.payload.doc.get('userId'),
+            name: action.payload.doc.get('name'),
+            color: action.payload.doc.get('color')
+          };
+        });
       }).shareReplay();
+  }
+
+  private updateLogsAfterActivityModification(uid: string, action: DocumentChangeAction) {
+    this.afs.collection('logs', ref => {
+      return ref.where("userId", "==", uid).where("activity.id", "==", action.payload.doc.id);
+    }).snapshotChanges().map(changes => {
+      return changes.map(action => {
+        return action.payload.doc.id;
+      });
+    }).first().subscribe(logIds => {
+      var batch = this.afs.firestore.batch();
+      logIds.forEach(id => {
+        batch.update(this.afs.doc<Log>(`logs/${id}`).ref, {
+          "activity": {
+            id: action.payload.doc.id,
+            userId: uid,
+            name: action.payload.doc.get('name'),
+            color: action.payload.doc.get('color')
+          }
+        });
+      });
+
+      batch.commit();
+    });
   }
 
   public createDefaultActivities() {

@@ -27,94 +27,94 @@ export class ChartsPage {
               private chartDataProvider: ChartDataProvider) {}
 
   ionViewDidLoad() {
-    this.chartDataProvider.last7DaysLogs.subscribe((logs: Array<Log>) => {
-      let datesOnly: Array<string> = [];
-      let sorted: Array<Array<Log>> = [];
+    // this.chartDataProvider.last7DaysLogs.subscribe((logs: Array<Log>) => {
+    //   let datesOnly: Array<string> = [];
+    //   let sorted: Array<Array<Log>> = [];
 
-      let sortedLogs: Object = logs.reduce((logArray: Log[], currentLog: Log) => {
-        var val = currentLog.activityId
-        logArray[val] = logArray[val] || [];
-        logArray[val].push(currentLog);
-        return logArray;
-      }, {});
+    //   let sortedLogs: Object = logs.reduce((logArray: Log[], currentLog: Log) => {
+    //     var val = currentLog.activityId
+    //     logArray[val] = logArray[val] || [];
+    //     logArray[val].push(currentLog);
+    //     return logArray;
+    //   }, {});
 
-      console.log("Sorted weekly logs:", sortedLogs);
+    //   console.log("Sorted weekly logs:", sortedLogs);
 
-      let secondSort: Array<any> = [];
-      Object.keys(sortedLogs).forEach((activity) => {
-        secondSort.push(sortedLogs[activity].reduce((logArray: Log[], currentLog: Log) => {
-          var val = currentLog.date.toISOString();
-          logArray[val] = logArray[val] || [];
-          logArray[val].push(currentLog);
-          return logArray;
-        }, {}));
-      })
+    //   let secondSort: Array<any> = [];
+    //   Object.keys(sortedLogs).forEach((activity) => {
+    //     secondSort.push(sortedLogs[activity].reduce((logArray: Log[], currentLog: Log) => {
+    //       var val = currentLog.date.toISOString();
+    //       logArray[val] = logArray[val] || [];
+    //       logArray[val].push(currentLog);
+    //       return logArray;
+    //     }, {}));
+    //   })
 
-      console.log("Second sort: ", secondSort);
+    //   console.log("Second sort: ", secondSort);
 
-      for (let index = 7; index >= 0; index--) {
-        let date: Date = new Date();
-        date.setDate(date.getDate() - index)
-        date.setHours(0,0,0,0);
-        datesOnly.push(date.toISOString());
-      }
+    //   for (let index = 7; index >= 0; index--) {
+    //     let date: Date = new Date();
+    //     date.setDate(date.getDate() - index)
+    //     date.setHours(0,0,0,0);
+    //     datesOnly.push(date.toISOString());
+    //   }
 
-      console.log("Dates: ", datesOnly);
+    //   console.log("Dates: ", datesOnly);
 
-      datesOnly.forEach((date: string) => {
-        secondSort.forEach(activity=> {
-          if(!activity[date]) {
-            return;
-          }
-          console.log(date, activity[date].length);
-        })
-      })
+    //   datesOnly.forEach((date: string) => {
+    //     secondSort.forEach(activity=> {
+    //       if(!activity[date]) {
+    //         return;
+    //       }
+    //       console.log(date, activity[date].length);
+    //     })
+    //   })
 
-      var dataArray = [];
-      secondSort.forEach(activity => {
-        var data = {
-          data: [],
-          label: "a"
-        };
-        datesOnly.forEach(date => {
-          if(activity[date]) {
-            data.data.push(activity[date].length);
-          } 
-          else {
-            data.data.push(0);
-          }
-        });
-        dataArray.push(data);
-      });
+    //   var dataArray = [];
+    //   secondSort.forEach(activity => {
+    //     var data = {
+    //       data: [],
+    //       label: "a"
+    //     };
+    //     datesOnly.forEach(date => {
+    //       if(activity[date]) {
+    //         data.data.push(activity[date].length);
+    //       } 
+    //       else {
+    //         data.data.push(0);
+    //       }
+    //     });
+    //     dataArray.push(data);
+    //   });
 
-      console.log("Data array: ", dataArray);
+    //   console.log("Data array: ", dataArray);
 
-      this.barChartData = dataArray;
-    });
+    //   this.barChartData = dataArray;
+    // });
 
-    this.chartDataProvider.thisYearsLogs.subscribe((logs: Array<Log>) => {
-      console.log("This year's logs: ", logs);
+    // this.chartDataProvider.thisYearsLogs.subscribe((logs: Array<Log>) => {
+    //   console.log("This year's logs: ", logs);
 
-      let sortedLogs: Object = logs.reduce((logArray: Log[], currentLog: Log) => {
-        var val = currentLog.activityId;
-        logArray[val] = logArray[val] || [];
-        logArray[val].push(currentLog);
-        return logArray;
-      }, {});
+    //   let sortedLogs: Object = logs.reduce((logArray: Log[], currentLog: Log) => {
+    //     var val = currentLog.activityId;
+    //     logArray[val] = logArray[val] || [];
+    //     logArray[val].push(currentLog);
+    //     return logArray;
+    //   }, {});
 
-      console.log("Sorted annual logs:", sortedLogs);
+    //   console.log("Sorted annual logs:", sortedLogs);
 
-      this.pieChartLabels = Object.keys(sortedLogs);
+    //   this.pieChartLabels = Object.keys(sortedLogs);
 
-      let activityCounts: Array<number> = [];
-      Object.keys(sortedLogs).forEach((activity) => {
-        activityCounts.push(sortedLogs[activity].length);
-      })
+    //   let activityCounts: Array<number> = [];
+    //   Object.keys(sortedLogs).forEach((activity) => {
+    //     activityCounts.push(sortedLogs[activity].length);
+    //   })
 
-      this.pieChartData = activityCounts;
+    //   this.pieChartData = activityCounts;
       
-      console.log("Pie data: ", this.pieChartLabels, this.pieChartData);
-    })
+    //   console.log("Pie data: ", this.pieChartLabels, this.pieChartData);
+    // })
   }
 
   // events

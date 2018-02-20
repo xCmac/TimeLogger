@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ActivityProvider } from '../activity/activity';
 import { Log } from '../../models/log';
 import { Activity } from '../../models/activity';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
@@ -14,7 +13,6 @@ export class LogProvider {
   today: Date;
 
   constructor(private afs: AngularFirestore,
-              private activityProvider: ActivityProvider,
               private userProvider: UserProvider) {
   }
 
@@ -27,15 +25,10 @@ export class LogProvider {
         return {
           id: action.payload.doc.id,
           userId: action.payload.doc.get('userId'),
-          activityId: action.payload.doc.get('activityId'),
+          activity: action.payload.doc.get('activity'),
           date: action.payload.doc.get('date'),
           blockNumber: action.payload.doc.get('blockNumber')
         };
-      });
-    }).map((result, index) => {
-      return result.map((log: Log) => {
-        log.activity = this.activityProvider.getActivityObservableById(log.activityId);
-        return log;
       });
     });
   }
@@ -56,7 +49,7 @@ export class LogProvider {
     let log: Log = {
       userId: this.userProvider.userId,
       date: new Date(),
-      activityId: activity.id,
+      activity: activity,
       blockNumber: timeBlock.name,
     };
 
@@ -76,7 +69,7 @@ export class LogProvider {
       userId: log.userId,
       date: log.date,
       blockNumber: log.blockNumber,
-      activityId: log.activityId
+      activity: log.activity
     });
   }
 }
