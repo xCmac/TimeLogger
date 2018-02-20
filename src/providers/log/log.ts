@@ -19,7 +19,9 @@ export class LogProvider {
   public setReferences(uid: string, logDate: Date) {
     this.logsCollection = this.afs.collection('logs');
     this.logs = this.afs.collection('logs', ref => {
-      return ref.where("userId", "==", uid);
+      let date = new Date();
+      date.setHours(0, 0, 0, 0);
+      return ref.where("userId", "==", uid).where("date", "==", date);
     }).snapshotChanges().map(changes => {
       return changes.map(action => {
         return {
@@ -46,9 +48,12 @@ export class LogProvider {
   }
 
   public logActivity(timeBlock: TimeBlock, activity: Activity) {
+    let date = new Date();
+    date.setHours(0, 0, 0, 0);
+
     let log: Log = {
       userId: this.userProvider.userId,
-      date: new Date(),
+      date: date,
       activity: activity,
       blockNumber: timeBlock.name,
     };
