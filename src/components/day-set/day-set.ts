@@ -3,7 +3,6 @@ import { PopoverController } from 'ionic-angular';
 import { LogProvider } from '../../providers/log/log';
 import { TimeBlock } from '../../models/timeblock';
 import { Log } from '../../models/log';
-import { Activity } from '../../models/activity';
 
 @Component({
   selector: 'day-set',
