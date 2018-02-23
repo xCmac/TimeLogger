@@ -19,4 +19,18 @@ export class HomePage {
     modal.present();
   }
 
+  swipeEvent(e) {
+    switch (e.offsetDirection) {
+      case 2: //right to left
+        console.log("Next");
+        break;
+      case 4: //left to right
+        console.log("Previous");
+        break;
+        
+      default:
+        break;
+    }
+  }
+
 }

@@ -9,5 +9,7 @@
 </ion-header>
 
 <ion-content padding>
-  <day-set></day-set>
+  <ion-grid>
+    <day-set (swipe)="swipeEvent($event)"></day-set>
+  </ion-grid>
 </ion-content>
