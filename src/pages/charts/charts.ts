@@ -43,7 +43,7 @@ export class ChartsPage {
       let logsSortedByActivityByDate: Array<any> = [];
       Object.keys(logsSortedByActivity).forEach((activity) => {
         logsSortedByActivityByDate.push(logsSortedByActivity[activity].reduce((logArray: Log[], currentLog: Log) => {
-          var date = currentLog.date.toISOString();
+          var date = currentLog.date.toLocaleDateString();
           logArray[date] = logArray[date] || [];
           logArray[date].push(currentLog);
           return logArray;
@@ -57,8 +57,10 @@ export class ChartsPage {
         let date: Date = new Date();
         date.setDate(date.getDate() - index)
         date.setHours(0,0,0,0);
-        datesOnly.push(date.toISOString());
+        datesOnly.push(date.toLocaleDateString());
       }
+
+      this.barChartLabels = datesOnly;
 
       // datesOnly.forEach((date: string) => {
       //   logsSortedByActivityByDate.forEach(activity=> {
@@ -95,9 +97,9 @@ export class ChartsPage {
       console.log("This year's logs: ", logs);
 
       let sortedLogs: Object = logs.reduce((logArray: Log[], currentLog: Log) => {
-        var val = currentLog.activityId;
-        logArray[val] = logArray[val] || [];
-        logArray[val].push(currentLog);
+        var activityName = currentLog.activity.name;
+        logArray[activityName] = logArray[activityName] || [];
+        logArray[activityName].push(currentLog);
         return logArray;
       }, {});
 
