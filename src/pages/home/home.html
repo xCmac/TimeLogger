@@ -10,6 +10,6 @@
 
 <ion-content padding>
   <ion-grid>
-    <day-set (swipe)="swipeEvent($event)"></day-set>
+    <day-set [date]="currentDate" (swipe)="swipeEvent($event)"></day-set>
   </ion-grid>
 </ion-content>

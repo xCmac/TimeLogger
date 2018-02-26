@@ -18,12 +18,18 @@ export class LogProvider {
 
   public setReferences(uid: string, logDate: Date) {
     this.logsCollection = this.afs.collection('logs');
+    this.getLogsForDate(uid, logDate);
+  }
+
+  public getLogsForDate(uid: string, date: Date) {
+    console.log(`UID : ${uid} DATE: ${date}`);
     this.logs = this.afs.collection('logs', ref => {
-      let date = new Date();
       date.setHours(0, 0, 0, 0);
       return ref.where("userId", "==", uid).where("date", "==", date);
     }).snapshotChanges().map(changes => {
       return changes.map(action => {
+        console.log("action: ", action);
+        console.log("Date : ", date);
         return {
           id: action.payload.doc.id,
           userId: action.payload.doc.get('userId'),
@@ -33,6 +39,10 @@ export class LogProvider {
         };
       });
     });
+  }
+
+  public changeDate() {
+
   }
 
   public getLogObservableByBlockNumber(blockNumber: number): Observable<any> {

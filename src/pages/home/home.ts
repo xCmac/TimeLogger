@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, IonicPage, ModalController } from 'ionic-angular';
+import { LogProvider } from '../../providers/log/log';
+import { UserProvider } from '../../providers/user/user';
 
 @IonicPage()
 @Component({
@@ -8,9 +10,13 @@ import { NavController, IonicPage, ModalController } from 'ionic-angular';
 })
 
 export class HomePage {
+  currentDate: Date;
 
   constructor(public navCtrl: NavController,
+              private logProvider: LogProvider,
+              private userProvider: UserProvider,
               private modalCtrl: ModalController) {
+    this.currentDate = new Date();
 
   }
 
@@ -21,13 +27,19 @@ export class HomePage {
 
   swipeEvent(e) {
     switch (e.offsetDirection) {
-      case 2: //right to left
-        console.log("Next");
+      case 2: //next
+        this.currentDate.setDate(this.currentDate.getDate() + 1);
+        this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), this.currentDate.getDate());
+        console.log("Next Date: ", this.currentDate);
+        this.logProvider.setReferences(this.userProvider.userId, this.currentDate);
         break;
-      case 4: //left to right
-        console.log("Previous");
+      case 4: //previous
+        this.currentDate.setDate(this.currentDate.getDate() - 1);
+        this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), this.currentDate.getDate());
+        console.log("Previous Date: ", this.currentDate);
+        this.logProvider.setReferences(this.userProvider.userId, this.currentDate);
         break;
-        
+
       default:
         break;
     }

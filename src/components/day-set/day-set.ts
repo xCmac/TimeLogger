@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { PopoverController } from 'ionic-angular';
 import { LogProvider } from '../../providers/log/log';
 import { TimeBlock } from '../../models/timeblock';
 import { Log } from '../../models/log';
+import { UserProvider } from '../../providers/user/user';
 
 @Component({
   selector: 'day-set',
@@ -10,13 +11,22 @@ import { Log } from '../../models/log';
 })
 
 export class DaySetComponent {
+  @Input() date: Date;
   timeBlocks: Array<TimeBlock> = [];
 
   constructor(private popoverCtrl: PopoverController,
+              private userProvider: UserProvider,
               private logProvider: LogProvider) {
   }
 
   ngOnInit() {
+    this.createTimeblocks(24);
+  }
+
+  ngOnChanges() {
+    console.log("Daniel is better than Rachel :", this.date);
+    this.timeBlocks = [];
+    this.logProvider.getLogsForDate(this.userProvider.userId, this.date);
     this.createTimeblocks(24);
   }
 
