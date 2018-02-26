@@ -17,6 +17,8 @@ export class HomePage {
               private userProvider: UserProvider,
               private modalCtrl: ModalController) {
     this.currentDate = new Date();
+    this.currentDate.setHours(0, 0, 0, 0);
+    this.currentDate.setMinutes(0, 0, 0);
 
   }
 
@@ -26,17 +28,21 @@ export class HomePage {
   }
 
   swipeEvent(e) {
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
+    today.setMinutes(0, 0, 0);
     switch (e.offsetDirection) {
       case 2: //next
+        if (this.currentDate.getTime() === today.getTime()) {
+          break;
+        }
         this.currentDate.setDate(this.currentDate.getDate() + 1);
         this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), this.currentDate.getDate());
-        console.log("Next Date: ", this.currentDate);
         this.logProvider.setReferences(this.userProvider.userId, this.currentDate);
         break;
       case 4: //previous
         this.currentDate.setDate(this.currentDate.getDate() - 1);
         this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), this.currentDate.getDate());
-        console.log("Previous Date: ", this.currentDate);
         this.logProvider.setReferences(this.userProvider.userId, this.currentDate);
         break;
 
