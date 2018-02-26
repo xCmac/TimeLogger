@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
-import { ActivityProvider } from '../../providers/activity/activity';
-import { LogProvider } from '../../providers/log/log';
 import { Log } from '../../models/log';
 import 'rxjs/add/operator/groupBy';
 import { ChartDataProvider } from '../../providers/chart-data/chart-data';
@@ -22,9 +20,7 @@ export class ChartsPage {
 
   public barChartData: any[];
 
-  constructor(private activityProvider: ActivityProvider, 
-              private logProvider: LogProvider,
-              private chartDataProvider: ChartDataProvider) {}
+  constructor(private chartDataProvider: ChartDataProvider) {}
 
   ionViewDidLoad() {
     this.setupLast7DaysBarChart();
