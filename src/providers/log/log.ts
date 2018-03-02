@@ -38,10 +38,6 @@ export class LogProvider {
     });
   }
 
-  public changeDate() {
-
-  }
-
   public getLogObservableByBlockNumber(blockNumber: number): Observable<any> {
     if (!this.logs) {
       return;
