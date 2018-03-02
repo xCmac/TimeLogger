@@ -22,14 +22,11 @@ export class LogProvider {
   }
 
   public getLogsForDate(uid: string, date: Date) {
-    console.log(`UID : ${uid} DATE: ${date}`);
     this.logs = this.afs.collection('logs', ref => {
       date.setHours(0, 0, 0, 0);
       return ref.where("userId", "==", uid).where("date", "==", date);
     }).snapshotChanges().map(changes => {
       return changes.map(action => {
-        console.log("action: ", action);
-        console.log("Date : ", date);
         return {
           id: action.payload.doc.id,
           userId: action.payload.doc.get('userId'),

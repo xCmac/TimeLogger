@@ -30,13 +30,11 @@ export class HomePage {
       case 2: //next
         this.currentDate.setDate(this.currentDate.getDate() + 1);
         this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), this.currentDate.getDate());
-        console.log("Next Date: ", this.currentDate);
         this.logProvider.setReferences(this.userProvider.userId, this.currentDate);
         break;
       case 4: //previous
         this.currentDate.setDate(this.currentDate.getDate() - 1);
         this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), this.currentDate.getDate());
-        console.log("Previous Date: ", this.currentDate);
         this.logProvider.setReferences(this.userProvider.userId, this.currentDate);
         break;
 

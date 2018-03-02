@@ -24,7 +24,6 @@ export class DaySetComponent {
   }
 
   ngOnChanges() {
-    console.log("Daniel is better than Rachel :", this.date);
     this.timeBlocks = [];
     this.logProvider.getLogsForDate(this.userProvider.userId, this.date);
     this.createTimeblocks(24);

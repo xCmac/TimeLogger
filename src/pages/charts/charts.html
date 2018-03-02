@@ -23,6 +23,7 @@
           [labels]="pieChartLabels"
           [chartType]="pieChartType"
           (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)">
+          (chartClick)="chartClicked($event)"
+          *ngIf="(pieChartData) ">
   </canvas>
 </ion-content>

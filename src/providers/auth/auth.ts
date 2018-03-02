@@ -47,7 +47,6 @@ export class AuthProvider {
   private setProviderReferences() {
     this.activityProvider.setReferences(this.user.uid);
     this.logProvider.setReferences(this.user.uid, new Date());
-    this.chartDataProvider.setReferences(this.user.uid);
   }
 
   async logout() {

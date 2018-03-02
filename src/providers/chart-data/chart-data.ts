@@ -2,57 +2,51 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Log } from '../../models/log';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { UserProvider } from '../user/user';
 
 @Injectable()
 export class ChartDataProvider {
-  private _last7DaysLogs: Observable<Log[]>;
-  private _thisYearsLogs: Observable<Log[]>;
 
-  constructor(private afs: AngularFirestore) {
+  constructor(private afs: AngularFirestore,
+              private userProvider: UserProvider) {
   }
 
-  public setReferences(uid: string) {
-    this._last7DaysLogs = this.afs.collection('logs', ref => {
+  public getLast7DaysLogs(): Promise<Log[]> {
+    return this.afs.collection('logs', ref => {
       let date = new Date();
       date.setDate(date.getDate() - 7);
       date.setHours(0, 0, 0, 0);
-      return ref.where("userId", "==", uid).where("date", ">", date);
-    }).snapshotChanges().map(changes => {
-      return changes.map(action => {
+      return ref.where("userId", "==", this.userProvider.userId).where("date", ">", date)
+    }).ref.get().then(data => {
+      return data.docChanges.map(action => {
         return {
-          id: action.payload.doc.id,
-          userId: action.payload.doc.get('userId'),
-          activity: action.payload.doc.get('activity'),
-          date: action.payload.doc.get('date'),
-          blockNumber: action.payload.doc.get('blockNumber')
+          id: action.doc.id,
+          userId: action.doc.get('userId'),
+          activity: action.doc.get('activity'),
+          date: action.doc.get('date'),
+          blockNumber: action.doc.get('blockNumber')
         };
       });
     });
+  } 
 
-    this._thisYearsLogs = this.afs.collection('logs', ref => {
+  public getThisYearsLogs(): Promise<Log[]> {
+    return this.afs.collection('logs', ref => {
       let date = new Date();
       date.setDate(1);
       date.setMonth(0);
       date.setHours(0, 0, 0, 0);
-      return ref.where("userId", "==", uid).where("date", ">=", date);
-    }).snapshotChanges().map(changes => {
-      return changes.map(action => {
+      return ref.where("userId", "==", this.userProvider.userId).where("date", ">=", date);
+    }).ref.get().then(data => {
+      return data.docChanges.map(action => {
         return {
-          id: action.payload.doc.id,
-          userId: action.payload.doc.get('userId'),
-          activity: action.payload.doc.get('activity'),
-          date: action.payload.doc.get('date'),
-          blockNumber: action.payload.doc.get('blockNumber')
+          id: action.doc.id,
+          userId: action.doc.get('userId'),
+          activity: action.doc.get('activity'),
+          date: action.doc.get('date'),
+          blockNumber: action.doc.get('blockNumber')
         };
       });
     });
-  }
-
-  get last7DaysLogs(): Observable<Log[]> {
-    return this._last7DaysLogs;
-  }
-
-  get thisYearsLogs(): Observable<Log[]> {
-    return this._thisYearsLogs;
   }
 }
