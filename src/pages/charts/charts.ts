@@ -19,11 +19,14 @@ export class ChartsPage {
   private pieChartData:number[];
   private pieChartType:string = 'pie';
 
+  private yearInPixelData: any[] = [];
+
   constructor(private chartDataProvider: ChartDataProvider) {}
 
   ionViewDidEnter() {
     this.setupLast7DaysBarChart();
     this.setupThisYearsPieChart();
+    this.setupYearInPixels();
   }
 
   private setupLast7DaysBarChart() {
@@ -99,6 +102,21 @@ export class ChartsPage {
       this.pieChartLabels = labels;
       this.pieChartData = activityCounts;
     });
+  }
+
+  private setupYearInPixels() {
+    this.chartDataProvider.getYearInPixelsLogs()
+    .then(logs => {
+      let data = logs.map(log => ({
+        activity: log.activity.name,
+        color: log.activity.color,
+        date: log.date,
+        hour: log.blockNumber
+      }));
+      this.yearInPixelData = data;
+      console.log("Pixel Data: ", data);
+    })
+
   }
 
   // events

@@ -26,4 +26,12 @@
           (chartClick)="chartClicked($event)"
           *ngIf="(pieChartData) ">
   </canvas>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-1 *ngFor="let log of yearInPixelData">
+        <button tappable ion-button small [color]="log.color"></button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
