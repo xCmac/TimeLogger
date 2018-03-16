@@ -31,7 +31,6 @@ export class AuthProvider {
   async login(email: string, password: string) {
     this.user = await this.afAuth.auth.signInWithEmailAndPassword(email, password);
     this.setProviderReferences();
-
   }
 
   async register(email: string, password: string) {

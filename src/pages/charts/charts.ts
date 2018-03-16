@@ -14,10 +14,12 @@ export class ChartsPage {
   private barChartType: string = 'bar';
   private barChartLegend: boolean = true;
   private barChartData: any[];
+  private barChartColors: any[] = [];
 
-  private pieChartLabels:string[] = [];
-  private pieChartData:number[];
-  private pieChartType:string = 'pie';
+  private pieChartLabels: string[] = [];
+  private pieChartData: number[];
+  private pieChartType: string = 'pie';
+  private pieChartColors: any[] = [{ backgroundColor:[] }];
 
   constructor(private chartDataProvider: ChartDataProvider) {}
 
@@ -29,13 +31,23 @@ export class ChartsPage {
   private setupLast7DaysBarChart() {
     this.chartDataProvider.getLast7DaysLogs()
       .then(data => {
+        let colors = {};
+
         let logsSortedByActivity = data.reduce((logArray: Log[], currentLog: Log) => {
-          var activityName = currentLog.activity.name
+          var activityName = currentLog.activity.name;
+          colors[activityName] = currentLog.activity.color;
           logArray[activityName] = logArray[activityName] || [];
           logArray[activityName].push(currentLog);
           return logArray;
-        }, {})
-      
+        }, {});
+
+        Object.keys(colors).forEach((activity: string) => {
+          this.barChartColors.push({
+            backgroundColor: this.getColor(colors[activity]),
+            borderColor: this.getColor(colors[activity])
+          });
+        })
+
         let activities = Object.keys(logsSortedByActivity);
 
         let logsSortedByActivityByDate: Array<any> = [];
@@ -46,12 +58,12 @@ export class ChartsPage {
             logArray[date].push(currentLog);
             return logArray;
           }, {}));
-        })
+        });
 
         let datesOnly: Array<string> = [];
         for (let index = 7; index >= 0; index--) {
           let date: Date = new Date();
-          date.setDate(date.getDate() - index)
+          date.setDate(date.getDate() - index);
           date.setHours(0, 0, 0, 0);
           datesOnly.push(date.toLocaleDateString());
         }
@@ -82,12 +94,23 @@ export class ChartsPage {
   private setupThisYearsPieChart() {
     this.chartDataProvider.getThisYearsLogs()
     .then(data => {
+      let colors = {};
+
       let sortedLogs = data.reduce((logArray: Log[], currentLog: Log) => {
         var activityName = currentLog.activity.name;
+        colors[activityName] = currentLog.activity.color;
         logArray[activityName] = logArray[activityName] || [];
         logArray[activityName].push(currentLog);
         return logArray;
       }, {});
+
+      console.log("colors", colors);
+
+      Object.keys(colors).forEach((activity: string) => {
+        this.pieChartColors[0].backgroundColor.push(this.getColor(colors[activity]));
+      });
+
+      console.log("piechartcolors", this.pieChartColors);
   
       let labels = [];
       let activityCounts: Array<number> = [];
@@ -99,6 +122,33 @@ export class ChartsPage {
       this.pieChartLabels = labels;
       this.pieChartData = activityCounts;
     });
+  }
+
+  private getColor(colorString: string) {
+    let colors = {
+      red: "#F44336",
+      pink: "#E91E63",
+      purple: "#9C27B0",
+      deepPurple: "#673AB7",
+      indigo: "#3F51B5",
+      blue: "#2196F3",
+      lightBlue: "#03A9F4",
+      cyan: "#00BCD4",
+      teal: "#009688",
+      green: "#4CAF50",
+      lightGreen: "#8BC34A",
+      lime: "#CDDC39",
+      yellow: "#FFEB3B",
+      amber: "#FFC107",
+      orange: "#FF9800",
+      deepOrange: "#FF5722",
+      brown: "#795548",
+      grey: "#9E9E9E", 
+      blueGrey: "#607D8B",
+      black: "#222"
+    };
+
+    return colors[colorString];
   }
 
   // events
