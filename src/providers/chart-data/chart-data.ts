@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { Log } from '../../models/log';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { UserProvider } from '../user/user';
@@ -16,7 +15,7 @@ export class ChartDataProvider {
       let date = new Date();
       date.setDate(date.getDate() - 7);
       date.setHours(0, 0, 0, 0);
-      return ref.where("userId", "==", this.userProvider.userId).where("date", ">", date)
+      return ref.where("userId", "==", this.userProvider.userId).where("date", ">", date);
     }).ref.get().then(data => {
       return data.docChanges.map(action => {
         return {
@@ -56,7 +55,7 @@ export class ChartDataProvider {
       date.setDate(1);
       date.setMonth(0);
       date.setHours(0, 0, 0, 0);
-      return ref.where("userId", "==", this.userProvider.userId).where("date", ">=", date).orderBy("date");
+      return ref.where("userId", "==", this.userProvider.userId).where("date", ">=", date).orderBy("date", "asc");
     }).ref.get().then(data => {
       return data.docChanges.map(action => {
         return {
