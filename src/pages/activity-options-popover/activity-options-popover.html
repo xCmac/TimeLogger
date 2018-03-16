@@ -12,7 +12,7 @@
   <ion-grid>
     <ion-row>
       <ion-col col-6 *ngFor="let activity of activityProvider.activities | async as Activity">
-        <button tappable ion-button full (click)="logActivity(activity)">{{ activity.name }}</button>
+        <button tappable ion-button full [color]="activity.color" (click)="logActivity(activity)">{{ activity.name }}</button>
       </ion-col>
     </ion-row>
     <ion-item>
