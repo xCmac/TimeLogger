@@ -16,7 +16,7 @@
     </ion-col>
     <ion-col>
       <ion-buttons end>
-        <button tappable ion-button icon-only (click)="showEditPopover(activity)">
+        <button tappable ion-button icon-only [color]="activity.color" (click)="showEditPopover(activity)">
           <ion-icon name="hammer"></ion-icon>
         </button>
         <button tappable ion-button icon-only color="danger" (click)="deleteActivity(activity)">

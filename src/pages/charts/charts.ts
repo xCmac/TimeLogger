@@ -107,13 +107,9 @@ export class ChartsPage {
         return logArray;
       }, {});
 
-      console.log("colors", colors);
-
       Object.keys(colors).forEach((activity: string) => {
         this.pieChartColors[0].backgroundColor.push(this.getColor(colors[activity]));
       });
-
-      console.log("piechartcolors", this.pieChartColors);
   
       let labels = [];
       let activityCounts: Array<number> = [];
