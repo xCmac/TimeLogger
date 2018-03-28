@@ -20,13 +20,13 @@
     *ngIf="barChartData">
   </canvas>
   <canvas baseChart
-          [data]="pieChartData"
-          [labels]="pieChartLabels"
-          [chartType]="pieChartType"
-          [colors]="pieChartColors"
-          (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)"
-          *ngIf="(pieChartData) ">
+    [data]="pieChartData"
+    [labels]="pieChartLabels"
+    [chartType]="pieChartType"
+    [colors]="pieChartColors"
+    (chartHover)="chartHovered($event)"
+    (chartClick)="chartClicked($event)"
+    *ngIf="(pieChartData)">
   </canvas>
 
   <ion-grid>
