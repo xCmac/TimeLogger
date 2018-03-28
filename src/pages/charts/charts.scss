@@ -9,7 +9,18 @@
         ion-card-header {
             font-weight: bold;
         }
- 
+
+        //this is so gross, refactor this to use CSS selectors WTF like ion-grid >ion-row> ion-col etc....
+        ion-grid {
+            ion-row {
+                ion-col {
+                    padding-bottom: 0;
+
+                    button {
+                        margin: 0;
+                    }
+                }
+            }
+        }
     }
- 
 }
