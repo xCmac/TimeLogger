@@ -56,8 +56,8 @@ export class ChartDataProvider {
       date.setDate(1);
       date.setMonth(0);
       date.setHours(0, 0, 0, 0);
-      return ref.where("userId", "==", this.userProvider.userId).where("date", ">=", date).orderBy("date");
-    }).ref.get().then(data => {
+      return ref.where("userId", "==", this.userProvider.userId).where("date", ">=", date);
+    }).ref.orderBy("date", "asc").get().then(data => {
       return data.docChanges.map(action => {
         return {
           id: action.doc.id,
