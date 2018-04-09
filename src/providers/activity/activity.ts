@@ -48,7 +48,7 @@ export class ActivityProvider {
       return changes.map(action => {
         return action.payload.doc.id;
       });
-    }).first().subscribe(logIds => {
+    }).subscribe(logIds => {
       var batch = this.afs.firestore.batch();
       logIds.forEach(id => {
         batch.update(this.afs.doc<Log>(`logs/${id}`).ref, {

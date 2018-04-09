@@ -90,7 +90,7 @@ export class ChartsPage {
           });
           sevenDayDataArray.push(activityData);
         });
-
+        
         this.barChartData = sevenDayDataArray;
     });
   }

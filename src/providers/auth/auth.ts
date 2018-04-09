@@ -22,6 +22,7 @@ export class AuthProvider {
       if(user) { 
         this.user = user;
         this.userProvider.userId = user.uid;
+        console.log("USerID: ", user.uid);
       }
     });
 
