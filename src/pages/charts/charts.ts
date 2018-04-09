@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { Log } from '../../models/log';
+import { Pixel } from '../../models/pixel';
 import 'rxjs/add/operator/groupBy';
 import { ChartDataProvider } from '../../providers/chart-data/chart-data';
 
@@ -21,7 +22,7 @@ export class ChartsPage {
   private pieChartType: string = 'pie';
   private pieChartColors: any[] = [{ backgroundColor:[] }];
 
-  private yearInPixelData: any[] = [];
+  private yearInPixelData: Pixel[] = [];
 
   constructor(private chartDataProvider: ChartDataProvider) {}
 
@@ -153,15 +154,48 @@ export class ChartsPage {
   private setupYearInPixels() {
     this.chartDataProvider.getYearInPixelsLogs()
     .then(logs => {
-      let data = logs.map(log => ({
+      let data: Pixel[] = logs.map(log => ({
         activity: log.activity.name,
         color: log.activity.color,
         date: log.date,
         hour: log.blockNumber
       }));
-      this.yearInPixelData = data;
+      // this.yearInPixelData = data;
       console.log("Pixel Data: ", data);
+      return data;
     })
+    .then(logs => {
+      this.createPixels(logs);
+    });
+  }
+
+  private createPixels(logs: Pixel[]) {
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let currentDate = new Date(today.getFullYear(), 0, 1, 0, 0, 0, 0);
+    
+    while (currentDate.getTime() != today.getTime()) {
+      for (let hour = 1; hour < 25; hour++) {
+        let currentLog = logs.find(log => {
+          return (log.date.getTime() == currentDate.getTime() && log.hour == hour)
+        });
+
+        if(currentLog) {
+          this.yearInPixelData.push(currentLog);
+        }
+        else {
+          this.yearInPixelData.push({
+            activity: "",
+            color: "#FFFFFF",
+            date: currentDate,
+            hour: hour
+          });
+        }
+      }
+
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    
   }
 
   // events
